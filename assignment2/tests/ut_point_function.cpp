@@ -3,65 +3,73 @@
 #include <random>
 #include "../src/point.h"
 #include "../src/point_function.h"
-
-TEST(PointFunctionTest, DistanceNormalCase)
+class PointFunctionTest : public ::testing::Test
+{
+protected:
+    void SetUp() override
+    {
+        gen.seed(3); // 固定種子
+    }
+    std::mt19937 gen; // 共享的隨機數生成器
+};
+TEST_F(PointFunctionTest, DistanceNormalCase)
 {
     Point a = {0, 0};
     Point b = {1, 1};
     EXPECT_NEAR(get_euclidean_distance(a, b), std::sqrt(2), 1e-9);
 }
-TEST(PointFunctionTest, DistanceOnXaxis)
+TEST_F(PointFunctionTest, DistanceOnXaxis)
 {
     Point a = {0, 0};
     Point b = {1, 0};
     EXPECT_NEAR(get_euclidean_distance(a, b), 1.0, 1e-9);
 }
-TEST(PointFunctionTest, DistanceOnYaxis)
+TEST_F(PointFunctionTest, DistanceOnYaxis)
 {
     Point a = {0, 0};
     Point b = {0, 1};
     EXPECT_NEAR(get_euclidean_distance(a, b), 1.0, 1e-9);
 }
-TEST(PointFunctionTest, DistanceZero)
+TEST_F(PointFunctionTest, DistanceZero)
 {
     Point a = {1, 1};
     Point b = {1, 1};
     EXPECT_NEAR(get_euclidean_distance(a, b), 0.0, 1e-9);
 }
-TEST(PointFunctionTest, DistanceNegativeCoordinates)
+TEST_F(PointFunctionTest, DistanceNegativeCoordinates)
 {
     Point a = {-1, -1};
     Point b = {1, 1};
     EXPECT_NEAR(get_euclidean_distance(a, b), 2 * std::sqrt(2), 1e-9);
 }
-TEST(PointFunctionTest, DistanceLargeCoordinates)
+TEST_F(PointFunctionTest, DistanceLargeCoordinates)
 {
     Point a = {1e6, 1e6};
     Point b = {2e6, 2e6};
     EXPECT_NEAR(get_euclidean_distance(a, b), 1e6 * std::sqrt(2), 1e-6);
 }
-TEST(PointFunctionTest, DistanceNonInteger)
+TEST_F(PointFunctionTest, DistanceNonInteger)
 {
     Point a = {0.6, 0.6};
     Point b = {1.6, 1.6};
     EXPECT_NEAR(get_euclidean_distance(a, b), std::sqrt(2), 1e-9);
 }
 
-TEST(PointFunctionTest, CollinearityDiffPointFalse)
+TEST_F(PointFunctionTest, CollinearityDiffPointFalse)
 {
     Point a = {0, 0};
     Point b = {1, 0};
     Point c = {0, 1};
     EXPECT_FALSE(is_collinear(a, b, c));
 }
-TEST(PointFunctionTest, CollinearityDiffPointTrue)
+TEST_F(PointFunctionTest, CollinearityDiffPointTrue)
 {
     Point a = {0, 0};
     Point b = {1, 1};
     Point c = {2, 2};
     EXPECT_TRUE(is_collinear(a, b, c));
 }
-TEST(PointFunctionTest, CollinearityVertical)
+TEST_F(PointFunctionTest, CollinearityVertical)
 {
     Point a = {1, 0};
     Point b = {1, 1};
@@ -69,7 +77,7 @@ TEST(PointFunctionTest, CollinearityVertical)
     EXPECT_TRUE(is_collinear(a, b, c));
 }
 
-TEST(PointFunctionTest, CollinearityHorizontal)
+TEST_F(PointFunctionTest, CollinearityHorizontal)
 {
     Point a = {0, 1};
     Point b = {1, 1};
@@ -77,35 +85,42 @@ TEST(PointFunctionTest, CollinearityHorizontal)
     EXPECT_TRUE(is_collinear(a, b, c));
 }
 
-TEST(PointFunctionTest, CollinearityTwoPointsSame)
+TEST_F(PointFunctionTest, CollinearityTwoPointsSame)
 {
     Point a = {0, 0};
     Point b = {0, 0};
     Point c = {1, 1};
     EXPECT_TRUE(is_collinear(a, b, c));
 }
-TEST(PointFunctionTest, CollinearitySamePoint)
+TEST_F(PointFunctionTest, CollinearitySamePoint)
 {
     Point a = {1, 1};
     Point b = a;
     Point c = a;
     EXPECT_TRUE(is_collinear(a, b, c));
 }
-TEST(PointFunctionTest, CollinearityLargeCoordinates)
+TEST_F(PointFunctionTest, CollinearityLargeCoordinates)
 {
     Point a = {1e6, 1e6};
     Point b = {2e6, 2e6};
     Point c = {3e6, 3e6};
     EXPECT_TRUE(is_collinear(a, b, c));
 }
-TEST(PointFunctionTest, CollinearityNonInteger)
+TEST_F(PointFunctionTest, CollinearityNonInteger)
 {
     Point a = {0.0, 0.0};
     Point b = {1.5, 1.5};
     Point c = {3.0, 3.0};
     EXPECT_TRUE(is_collinear(a, b, c));
 }
-TEST(PointFunctionTest, IdentifyQuadrant1)
+TEST_F(PointFunctionTest, CollinearityNearPoints)
+{
+    Point a = {0, 0};
+    Point b = {1, 1};
+    Point c = {2 + 1e-10, 2 + 1e-10};
+    EXPECT_TRUE(is_collinear(a, b, c));
+}
+TEST_F(PointFunctionTest, IdentifyQuadrant1)
 {
     std::mt19937 gen(3);
     std::uniform_real_distribution<double> dis(1.0, 100.0);
@@ -113,7 +128,7 @@ TEST(PointFunctionTest, IdentifyQuadrant1)
     Point a = {random, random};
     EXPECT_EQ(get_quadrant(a), "Quadrant 1");
 }
-TEST(PointFunctionTest, IdentifyQuadrant2)
+TEST_F(PointFunctionTest, IdentifyQuadrant2)
 {
     std::mt19937 gen(3);
     std::uniform_real_distribution<double> dis(1.0, 100.0);
@@ -121,7 +136,7 @@ TEST(PointFunctionTest, IdentifyQuadrant2)
     Point a = {-random, random};
     EXPECT_EQ(get_quadrant(a), "Quadrant 2");
 }
-TEST(PointFunctionTest, IdentifyQuadrant3)
+TEST_F(PointFunctionTest, IdentifyQuadrant3)
 {
     std::mt19937 gen(3);
     std::uniform_real_distribution<double> dis(1.0, 100.0);
@@ -129,7 +144,7 @@ TEST(PointFunctionTest, IdentifyQuadrant3)
     Point a = {-random, -random};
     EXPECT_EQ(get_quadrant(a), "Quadrant 3");
 }
-TEST(PointFunctionTest, IdentifyQuadrant4)
+TEST_F(PointFunctionTest, IdentifyQuadrant4)
 {
     std::mt19937 gen(3);
     std::uniform_real_distribution<double> dis(1.0, 100.0);
@@ -137,7 +152,7 @@ TEST(PointFunctionTest, IdentifyQuadrant4)
     Point a = {random, -random};
     EXPECT_EQ(get_quadrant(a), "Quadrant 4");
 }
-TEST(PointFunctionTest, IdentifyQuadrantXaxis)
+TEST_F(PointFunctionTest, IdentifyQuadrantXaxis)
 {
     std::mt19937 gen(3);
     std::uniform_real_distribution<double> dis(1.0, 100.0);
@@ -145,7 +160,7 @@ TEST(PointFunctionTest, IdentifyQuadrantXaxis)
     Point a = {random, 0};
     EXPECT_EQ(get_quadrant(a), "On X axis");
 }
-TEST(PointFunctionTest, IdentifyQuadrantYaxis)
+TEST_F(PointFunctionTest, IdentifyQuadrantYaxis)
 {
     std::mt19937 gen(3);
     std::uniform_real_distribution<double> dis(1.0, 100.0);
@@ -153,12 +168,12 @@ TEST(PointFunctionTest, IdentifyQuadrantYaxis)
     Point a = {0, random};
     EXPECT_EQ(get_quadrant(a), "On Y axis");
 }
-TEST(PointFunctionTest, IdentifyQuadrantOrigin)
+TEST_F(PointFunctionTest, IdentifyQuadrantOrigin)
 {
     Point a = {0, 0};
     EXPECT_EQ(get_quadrant(a), "Origin");
 }
-TEST(PointFunctionTest, MidPointNormalCase)
+TEST_F(PointFunctionTest, MidPointNormalCase)
 { // Single unit
     Point a = {0, 0};
     Point b = {1, 1};
@@ -167,7 +182,7 @@ TEST(PointFunctionTest, MidPointNormalCase)
     EXPECT_NEAR(MidPoint.y, 0.5, 1e-9);
     EXPECT_EQ(get_euclidean_distance(a, MidPoint), get_euclidean_distance(b, MidPoint));
 }
-TEST(PointFunctionTest, MidPointOnXaxis)
+TEST_F(PointFunctionTest, MidPointOnXaxis)
 { // On X axis
     Point a = {0, 0};
     Point b = {1, 0};
@@ -176,7 +191,7 @@ TEST(PointFunctionTest, MidPointOnXaxis)
     EXPECT_NEAR(MidPoint.y, 0.0, 1e-9);
     EXPECT_EQ(get_euclidean_distance(a, MidPoint), get_euclidean_distance(b, MidPoint));
 }
-TEST(PointFunctionTest, MidPointOnYaxis)
+TEST_F(PointFunctionTest, MidPointOnYaxis)
 { // On Y axis
     Point a = {0, 0};
     Point b = {0, 1};
@@ -185,7 +200,7 @@ TEST(PointFunctionTest, MidPointOnYaxis)
     EXPECT_NEAR(MidPoint.y, 0.5, 1e-9);
     EXPECT_EQ(get_euclidean_distance(a, MidPoint), get_euclidean_distance(b, MidPoint));
 }
-TEST(PointFunctionTest, MidPointSamePoint)
+TEST_F(PointFunctionTest, MidPointSamePoint)
 { // Same point
     Point a = {1, 1};
     Point b = {1, 1};
@@ -194,7 +209,7 @@ TEST(PointFunctionTest, MidPointSamePoint)
     EXPECT_NEAR(MidPoint.y, 1.0, 1e-9);
     EXPECT_EQ(get_euclidean_distance(a, MidPoint), get_euclidean_distance(b, MidPoint));
 }
-TEST(PointFunctionTest, MidPointNegativeCoordinates)
+TEST_F(PointFunctionTest, MidPointNegativeCoordinates)
 {
     Point a = {-1, -1};
     Point b = {1, 1};
