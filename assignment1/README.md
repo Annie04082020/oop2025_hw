@@ -1,0 +1,8 @@
+- [x] string::length 
+- [x] string::empty 
+- [x] string::clear 
+- [x] string::insert 
+- [x] string::copy 
+- [x] string::compare 
+- [x] string::swap 
+- [ ] string::find (For this function, you have to write at least two test cases for different scenarios.)
