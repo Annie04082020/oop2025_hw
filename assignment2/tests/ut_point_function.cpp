@@ -126,7 +126,7 @@ TEST_F(PointFunctionTest, IdentifyQuadrant1)
     std::uniform_real_distribution<double> dis(1.0, 100.0);
     double random = dis(gen);
     Point a = {random, random};
-    EXPECT_EQ(get_quadrant(a), "Quadrant 1");
+    EXPECT_EQ(get_quadrant(a), "first");
 }
 TEST_F(PointFunctionTest, IdentifyQuadrant2)
 {
@@ -134,7 +134,7 @@ TEST_F(PointFunctionTest, IdentifyQuadrant2)
     std::uniform_real_distribution<double> dis(1.0, 100.0);
     double random = dis(gen);
     Point a = {-random, random};
-    EXPECT_EQ(get_quadrant(a), "Quadrant 2");
+    EXPECT_EQ(get_quadrant(a), "second");
 }
 TEST_F(PointFunctionTest, IdentifyQuadrant3)
 {
@@ -142,7 +142,7 @@ TEST_F(PointFunctionTest, IdentifyQuadrant3)
     std::uniform_real_distribution<double> dis(1.0, 100.0);
     double random = dis(gen);
     Point a = {-random, -random};
-    EXPECT_EQ(get_quadrant(a), "Quadrant 3");
+    EXPECT_EQ(get_quadrant(a), "third");
 }
 TEST_F(PointFunctionTest, IdentifyQuadrant4)
 {
@@ -150,7 +150,7 @@ TEST_F(PointFunctionTest, IdentifyQuadrant4)
     std::uniform_real_distribution<double> dis(1.0, 100.0);
     double random = dis(gen);
     Point a = {random, -random};
-    EXPECT_EQ(get_quadrant(a), "Quadrant 4");
+    EXPECT_EQ(get_quadrant(a), "fourth");
 }
 TEST_F(PointFunctionTest, IdentifyQuadrantXaxis)
 {
@@ -158,7 +158,7 @@ TEST_F(PointFunctionTest, IdentifyQuadrantXaxis)
     std::uniform_real_distribution<double> dis(1.0, 100.0);
     double random = dis(gen);
     Point a = {random, 0};
-    EXPECT_EQ(get_quadrant(a), "On X axis");
+    EXPECT_EQ(get_quadrant(a), "not in any quadrant");
 }
 TEST_F(PointFunctionTest, IdentifyQuadrantYaxis)
 {
@@ -166,12 +166,12 @@ TEST_F(PointFunctionTest, IdentifyQuadrantYaxis)
     std::uniform_real_distribution<double> dis(1.0, 100.0);
     double random = dis(gen);
     Point a = {0, random};
-    EXPECT_EQ(get_quadrant(a), "On Y axis");
+    EXPECT_EQ(get_quadrant(a), "not in any quadrant");
 }
 TEST_F(PointFunctionTest, IdentifyQuadrantOrigin)
 {
     Point a = {0, 0};
-    EXPECT_EQ(get_quadrant(a), "Origin");
+    EXPECT_EQ(get_quadrant(a), "not in any quadrant");
 }
 TEST_F(PointFunctionTest, MidPointNormalCase)
 { // Single unit

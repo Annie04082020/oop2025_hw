@@ -19,19 +19,15 @@ bool is_collinear(Point p, Point q, Point r)
 std::string get_quadrant(Point p)
 {
     if (p.x > 0 && p.y > 0)
-        return "Quadrant 1";
+        return "first";
     else if (p.x < 0 && p.y > 0)
-        return "Quadrant 2";
+        return "second";
     else if (p.x < 0 && p.y < 0)
-        return "Quadrant 3";
+        return "third";
     else if (p.x > 0 && p.y < 0)
-        return "Quadrant 4";
-    else if (p.x == 0 && p.y != 0)
-        return "On Y axis";
-    else if (p.y == 0 && p.x != 0)
-        return "On X axis";
+        return "fourth";
     else
-        return "Origin";
+        return "not in any quadrant";
 }
 Point get_midpoint(Point p, Point q)
 {
