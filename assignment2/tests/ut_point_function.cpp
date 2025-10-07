@@ -40,6 +40,13 @@ TEST(PointFunctionTest, DistanceLargeCoordinates)
     Point b = {2e6, 2e6};
     EXPECT_NEAR(get_euclidean_distance(a, b), 1e6 * std::sqrt(2), 1e-6);
 }
+TEST(PointFunctionTest, DistanceNonInteger)
+{
+    Point a = {0.6, 0.6};
+    Point b = {1.6, 1.6};
+    EXPECT_NEAR(get_euclidean_distance(a, b), std::sqrt(2), 1e-9);
+}
+
 TEST(PointFunctionTest, CollinearityDiffPointFalse)
 {
     Point a = {0, 0};
@@ -89,6 +96,13 @@ TEST(PointFunctionTest, CollinearityLargeCoordinates)
     Point a = {1e6, 1e6};
     Point b = {2e6, 2e6};
     Point c = {3e6, 3e6};
+    EXPECT_TRUE(is_collinear(a, b, c));
+}
+TEST(PointFunctionTest, CollinearityNonInteger)
+{
+    Point a = {0.0, 0.0};
+    Point b = {1.5, 1.5};
+    Point c = {3.0, 3.0};
     EXPECT_TRUE(is_collinear(a, b, c));
 }
 TEST(PointFunctionTest, IdentifyQuadrant1)
