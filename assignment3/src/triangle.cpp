@@ -19,10 +19,7 @@ double Triangle::perimeter() const
 
 bool Triangle::is_equilateral() const
 {
-    std::tuple<double, double, double> sides = get_sides(*this);
-    double a = std::get<0>(sides);
-    double b = std::get<1>(sides);
-    double c = std::get<2>(sides);
+    auto [a, b, c] = get_sides(*this);
     bool a_eq_b = std::abs(a - b) < 1e-9;
     bool b_eq_c = std::abs(b - c) < 1e-9;
     bool a_eq_c = std::abs(a - c) < 1e-9;
@@ -31,10 +28,7 @@ bool Triangle::is_equilateral() const
 
 bool Triangle::is_right() const
 {
-    std::tuple<double, double, double> sides = get_sides(*this);
-    double a = std::get<0>(sides);
-    double b = std::get<1>(sides);
-    double c = std::get<2>(sides);
+    auto [a, b, c] = get_sides(*this);
     double max_side_sqr = std::max({a * a, b * b, c * c});
     double sum_sqr = a * a + b * b + c * c;
     double other_sum_sqr = sum_sqr - max_side_sqr;
