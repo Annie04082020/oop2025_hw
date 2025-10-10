@@ -1,25 +1,28 @@
 #include <cmath>
 #include <algorithm>
+#include <tuple>
 #include "triangle.h"
 #include "point.h"
 
-void Triangle::get_sides(double &a, double &b, double &c) const
+std::tuple<double, double, double> get_sides(Triangle x)
 {
-    a = this->p.get_euclidean_distance(q);
-    b = this->q.get_euclidean_distance(r);
-    c = this->r.get_euclidean_distance(p);
+    double a = x.p.get_euclidean_distance(x.q);
+    double b = x.q.get_euclidean_distance(x.r);
+    double c = x.r.get_euclidean_distance(x.p);
+    return std::make_tuple(a, b, c);
 }
 double Triangle::perimeter() const
 {
-    double a, b, c;
-    this->get_sides(a, b, c);
-    return a + b + c;
+    std::tuple<double, double, double> sides = get_sides(*this);
+    return std::get<0>(sides) + std::get<1>(sides) + std::get<2>(sides);
 }
 
 bool Triangle::is_equilateral() const
 {
-    double a, b, c;
-    this->get_sides(a, b, c);
+    std::tuple<double, double, double> sides = get_sides(*this);
+    double a = std::get<0>(sides);
+    double b = std::get<1>(sides);
+    double c = std::get<2>(sides);
     bool a_eq_b = std::abs(a - b) < 1e-9;
     bool b_eq_c = std::abs(b - c) < 1e-9;
     bool a_eq_c = std::abs(a - c) < 1e-9;
@@ -28,8 +31,10 @@ bool Triangle::is_equilateral() const
 
 bool Triangle::is_right() const
 {
-    double a, b, c;
-    this->get_sides(a, b, c);
+    std::tuple<double, double, double> sides = get_sides(*this);
+    double a = std::get<0>(sides);
+    double b = std::get<1>(sides);
+    double c = std::get<2>(sides);
     double max_side_sqr = std::max({a * a, b * b, c * c});
     double sum_sqr = a * a + b * b + c * c;
     double other_sum_sqr = sum_sqr - max_side_sqr;
