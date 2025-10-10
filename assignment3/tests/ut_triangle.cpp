@@ -33,6 +33,10 @@ protected:
     Point p_exs_rt = {0.0, 0.0};
     Point q_exs_rt = {3 * 1e-6, 0.0};
     Point r_exs_rt = {0.0, 4 * 1e-6};
+    // Not a Triangle (Collinear)
+    Point p_col = {0.0, 0.0};
+    Point q_col = {1.0, 0.0};
+    Point r_col = {2.0, 0.0};
 };
 TEST_F(TriangleFunctionTest, UnitTrianglePerimeter)
 {
@@ -153,4 +157,21 @@ TEST_F(TriangleFunctionTest, ExtremeSmallRightTriangleRightorNot)
 {
     Triangle a = {p_exs_rt, q_exs_rt, r_exs_rt};
     EXPECT_TRUE(a.is_right());
+}
+TEST_F(TriangleFunctionTest, NotTrianglePerimeter)
+{
+    Triangle a = {p_col, q_col, r_col};
+    double perimeter = a.perimeter();
+    double ans = 4.0;
+    EXPECT_NEAR(perimeter, ans, 1e-9);
+}
+TEST_F(TriangleFunctionTest, NotTriangleEquilateral)
+{
+    Triangle a = {p_col, q_col, r_col};
+    EXPECT_FALSE(a.is_equilateral());
+}
+TEST_F(TriangleFunctionTest, NotTriangleRightorNot)
+{
+    Triangle a = {p_col, q_col, r_col};
+    EXPECT_FALSE(a.is_right());
 }
