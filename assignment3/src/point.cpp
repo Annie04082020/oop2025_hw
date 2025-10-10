@@ -12,7 +12,7 @@ double Point::get_euclidean_distance(const Point &other) const
 bool Point::is_collinear(const Point &other1, const Point &other2) const
 {
     // Cross product will be zero if any two vectors are collinear
-    double cross_product = (other1.x - other2.x) * (this->y - other1.y) - (other2.y - other1.y) * (this->x - this->x);
+    double cross_product = (other1.x - this->x) * (other2.y - this->y) - (other1.y - this->y) * (other2.x - this->x);
     return std::abs(cross_product) < 1e-9;
 }
 std::string Point::get_quadrant() const
