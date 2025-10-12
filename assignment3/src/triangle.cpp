@@ -1,6 +1,7 @@
 #include <cmath>
 #include <algorithm>
 #include <tuple>
+#include <stdexcept>
 #include "triangle.h"
 #include "point.h"
 
@@ -11,6 +12,15 @@ std::tuple<double, double, double> get_sides(Triangle x)
     double c = x.r.get_euclidean_distance(x.p);
     return std::make_tuple(a, b, c);
 }
+bool is_valid_triangle(Triangle x)
+{
+    auto [a, b, c] = get_sides(x);
+    if (a < 1e-12 || b < 1e-12 || c < 1e-12)
+        return false;
+    if (a + b - c < 1e-12 || a + c - b < 1e-12 || b + c - a < 1e-12)
+        return false;
+    return true;
+}
 double Triangle::perimeter() const
 {
     std::tuple<double, double, double> sides = get_sides(*this);
@@ -19,6 +29,8 @@ double Triangle::perimeter() const
 
 bool Triangle::is_equilateral() const
 {
+    if (!is_valid_triangle(*this))
+        throw std::invalid_argument("Triangle is not valid");
     auto [a, b, c] = get_sides(*this);
     bool a_eq_b = std::abs(a - b) < 1e-12;
     bool b_eq_c = std::abs(b - c) < 1e-12;
@@ -28,6 +40,8 @@ bool Triangle::is_equilateral() const
 
 bool Triangle::is_right() const
 {
+    if (!is_valid_triangle(*this))
+        throw std::invalid_argument("Triangle is not valid");
     auto [a, b, c] = get_sides(*this);
     double max_side_sqr = std::max({a * a, b * b, c * c});
     double sum_sqr = a * a + b * b + c * c;

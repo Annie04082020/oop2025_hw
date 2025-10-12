@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <cmath>
+#include <stdexcept>
 #include "../src/point.h"
 #include "../src/triangle.h"
 class TriangleFunctionTest : public ::testing::Test
@@ -37,6 +38,14 @@ protected:
     Point p_col = {0.0, 0.0};
     Point q_col = {1.0, 0.0};
     Point r_col = {2.0, 0.0};
+    // Not a Triangle (Overlapping Points)
+    Point p_ovlap = {0.0, 0.0};
+    Point q_ovlap = {0.0, 0.0};
+    Point r_ovlap = {0.0, 0.0};
+    // Not a Triangle (Overlapping 2 Points)
+    Point p_2ovlap = {0.0, 0.0};
+    Point q_2ovlap = {0.0, 0.0};
+    Point r_2ovlap = {1.0, 0.0};
 };
 TEST_F(TriangleFunctionTest, UnitTrianglePerimeter)
 {
@@ -48,12 +57,12 @@ TEST_F(TriangleFunctionTest, UnitTrianglePerimeter)
 TEST_F(TriangleFunctionTest, UnitTriangleEquilateral)
 {
     Triangle a = {p, q, r};
-    EXPECT_FALSE(a.is_equilateral());
+    EXPECT_NO_THROW({ EXPECT_FALSE(a.is_equilateral()); });
 }
 TEST_F(TriangleFunctionTest, UnitTriangleRightorNot)
 {
     Triangle a = {p, q, r};
-    EXPECT_TRUE(a.is_right());
+    EXPECT_NO_THROW({ EXPECT_TRUE(a.is_right()); });
 }
 TEST_F(TriangleFunctionTest, EqualTrianglePerimeter)
 {
@@ -65,12 +74,12 @@ TEST_F(TriangleFunctionTest, EqualTrianglePerimeter)
 TEST_F(TriangleFunctionTest, EqualTriangleEquilateral)
 {
     Triangle a = {p_eq, q_eq, r_eq};
-    EXPECT_TRUE(a.is_equilateral());
+    EXPECT_NO_THROW({ EXPECT_TRUE(a.is_equilateral()); });
 }
 TEST_F(TriangleFunctionTest, EqualTriangleRightorNot)
 {
     Triangle a = {p_eq, q_eq, r_eq};
-    EXPECT_FALSE(a.is_right());
+    EXPECT_NO_THROW({ EXPECT_FALSE(a.is_right()); });
 }
 TEST_F(TriangleFunctionTest, ExtremeBigEqualTrianglePerimeter)
 {
@@ -82,12 +91,12 @@ TEST_F(TriangleFunctionTest, ExtremeBigEqualTrianglePerimeter)
 TEST_F(TriangleFunctionTest, ExtremeBigEqualTriangleEquilateral)
 {
     Triangle a = {p_exb_eq, q_exb_eq, r_exb_eq};
-    EXPECT_TRUE(a.is_equilateral());
+    EXPECT_NO_THROW({ EXPECT_TRUE(a.is_equilateral()); });
 }
 TEST_F(TriangleFunctionTest, ExtremeBigEqualTriangleRightorNot)
 {
     Triangle a = {p_exb_eq, q_exb_eq, r_exb_eq};
-    EXPECT_FALSE(a.is_right());
+    EXPECT_NO_THROW({ EXPECT_FALSE(a.is_right()); });
 }
 TEST_F(TriangleFunctionTest, ExtremeSmallEqualTrianglePerimeter)
 {
@@ -99,12 +108,12 @@ TEST_F(TriangleFunctionTest, ExtremeSmallEqualTrianglePerimeter)
 TEST_F(TriangleFunctionTest, ExtremeSmallEqualTriangleEquilateral)
 {
     Triangle a = {p_exs_eq, q_exs_eq, r_exs_eq};
-    EXPECT_TRUE(a.is_equilateral());
+    EXPECT_NO_THROW({ EXPECT_TRUE(a.is_equilateral()); });
 }
 TEST_F(TriangleFunctionTest, ExtremeSmallEqualTriangleRightorNot)
 {
     Triangle a = {p_exs_eq, q_exs_eq, r_exs_eq};
-    EXPECT_FALSE(a.is_right());
+    EXPECT_NO_THROW({ EXPECT_FALSE(a.is_right()); });
 }
 
 TEST_F(TriangleFunctionTest, RightTrianglePerimeter)
@@ -117,12 +126,12 @@ TEST_F(TriangleFunctionTest, RightTrianglePerimeter)
 TEST_F(TriangleFunctionTest, RightTriangleEquilateral)
 {
     Triangle a = {p_rt, q_rt, r_rt};
-    EXPECT_FALSE(a.is_equilateral());
+    EXPECT_NO_THROW({ EXPECT_FALSE(a.is_equilateral()); });
 }
 TEST_F(TriangleFunctionTest, RightTriangleRightorNot)
 {
     Triangle a = {p_rt, q_rt, r_rt};
-    EXPECT_TRUE(a.is_right());
+    EXPECT_NO_THROW({ EXPECT_TRUE(a.is_right()); });
 }
 TEST_F(TriangleFunctionTest, ExtremeBigRightTrianglePerimeter)
 {
@@ -134,12 +143,12 @@ TEST_F(TriangleFunctionTest, ExtremeBigRightTrianglePerimeter)
 TEST_F(TriangleFunctionTest, ExtremeBigRightTriangleEquilateral)
 {
     Triangle a = {p_exb_rt, q_exb_rt, r_exb_rt};
-    EXPECT_FALSE(a.is_equilateral());
+    EXPECT_NO_THROW({ EXPECT_FALSE(a.is_equilateral()); });
 }
 TEST_F(TriangleFunctionTest, ExtremeBigRightTriangleRightorNot)
 {
     Triangle a = {p_exb_rt, q_exb_rt, r_exb_rt};
-    EXPECT_TRUE(a.is_right());
+    EXPECT_NO_THROW({ EXPECT_TRUE(a.is_right()); });
 }
 TEST_F(TriangleFunctionTest, ExtremeSmallRightTrianglePerimeter)
 {
@@ -151,12 +160,12 @@ TEST_F(TriangleFunctionTest, ExtremeSmallRightTrianglePerimeter)
 TEST_F(TriangleFunctionTest, ExtremeSmallRightTriangleEquilateral)
 {
     Triangle a = {p_exs_rt, q_exs_rt, r_exs_rt};
-    EXPECT_FALSE(a.is_equilateral());
+    EXPECT_NO_THROW({ EXPECT_FALSE(a.is_equilateral()); });
 }
 TEST_F(TriangleFunctionTest, ExtremeSmallRightTriangleRightorNot)
 {
     Triangle a = {p_exs_rt, q_exs_rt, r_exs_rt};
-    EXPECT_TRUE(a.is_right());
+    EXPECT_NO_THROW({ EXPECT_TRUE(a.is_right()); });
 }
 TEST_F(TriangleFunctionTest, NotTrianglePerimeter)
 {
@@ -168,10 +177,44 @@ TEST_F(TriangleFunctionTest, NotTrianglePerimeter)
 TEST_F(TriangleFunctionTest, NotTriangleEquilateral)
 {
     Triangle a = {p_col, q_col, r_col};
-    EXPECT_FALSE(a.is_equilateral());
+    EXPECT_THROW(a.is_equilateral(), std::invalid_argument);
 }
 TEST_F(TriangleFunctionTest, NotTriangleRightorNot)
 {
     Triangle a = {p_col, q_col, r_col};
-    EXPECT_FALSE(a.is_right());
+    EXPECT_THROW(a.is_right(), std::invalid_argument);
+}
+TEST_F(TriangleFunctionTest, OverlapPointsPerimeter)
+{
+    Triangle a = {p_ovlap, q_ovlap, r_ovlap};
+    double perimeter = a.perimeter();
+    double ans = 0.0;
+    EXPECT_NEAR(perimeter, ans, 1e-9);
+}
+TEST_F(TriangleFunctionTest, OverlapPointsEquilateral)
+{
+    Triangle a = {p_ovlap, q_ovlap, r_ovlap};
+    EXPECT_THROW(a.is_equilateral(), std::invalid_argument);
+}
+TEST_F(TriangleFunctionTest, OverlapPointsRightorNot)
+{
+    Triangle a = {p_ovlap, q_ovlap, r_ovlap};
+    EXPECT_THROW(a.is_right(), std::invalid_argument);
+}
+TEST_F(TriangleFunctionTest, Overlap2PointsPerimeter)
+{
+    Triangle a = {p_2ovlap, q_2ovlap, r_2ovlap};
+    double perimeter = a.perimeter();
+    double ans = 2.0;
+    EXPECT_NEAR(perimeter, ans, 1e-9);
+}
+TEST_F(TriangleFunctionTest, Overlap2PointsEquilateral)
+{
+    Triangle a = {p_2ovlap, q_2ovlap, r_2ovlap};
+    EXPECT_THROW(a.is_equilateral(), std::invalid_argument);
+}
+TEST_F(TriangleFunctionTest, Overlap2PointsRightorNot)
+{
+    Triangle a = {p_2ovlap, q_2ovlap, r_2ovlap};
+    EXPECT_THROW(a.is_right(), std::invalid_argument);
 }
