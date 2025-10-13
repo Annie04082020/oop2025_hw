@@ -1,0 +1,12 @@
+1. What are the four steps of How-to-Solve-It? (10%)
+
+    1. Understand the Problem
+    2. Find a way to solve and seperate the problem into steps
+    3. Practicing your solutions
+    4. Look Back
+
+2. What are the three steps of TDD? (10%)
+
+    1. Define expected outputs 
+    2. Write the test
+    3. Write the corresponding code to pass the test  
