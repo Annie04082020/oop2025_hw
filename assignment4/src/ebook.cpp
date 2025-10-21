@@ -8,7 +8,7 @@ EBook::EBook(long unique_id, std::string title, std::string author) : LibraryIte
 std::string EBook::get_type()
 {
     return "EBook";
-}
+};
 
 std::string EBook::to_string()
 {
@@ -16,4 +16,4 @@ std::string EBook::to_string()
     oss << "EBook: " << this->title << " by " << this->author;
     std::string s = oss.str();
     return s;
-}
+};

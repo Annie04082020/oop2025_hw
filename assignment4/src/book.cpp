@@ -8,7 +8,7 @@ Book::Book(long unique_id, std::string title, std::string author) : LibraryItem(
 std::string Book::get_type()
 {
     return "Book";
-}
+};
 
 std::string Book::to_string()
 {
@@ -16,4 +16,4 @@ std::string Book::to_string()
     oss << "Book: " << this->title << " by " << this->author;
     std::string s = oss.str();
     return s;
-}
+};
