@@ -105,3 +105,26 @@ TEST_F(LibraryTest, TotalItems)
     LibSys.add_item(&f);
     EXPECT_EQ(LibSys.get_total_items(), 6);
 }
+TEST_F(LibraryTest, SearchNonExistentItem)
+{
+    LibSys.add_item(&a);
+    LibSys.add_item(&b);
+    auto result_by_title = LibSys.search_by_title("Non Existent Title");
+    EXPECT_EQ(result_by_title.size(), 0);
+    auto result_by_author = LibSys.search_by_author("Non Existent Author");
+    EXPECT_EQ(result_by_author.size(), 0);
+}
+TEST_F(LibraryTest, DynamicObjectMethod)
+{
+    Book *book_ptr = new Book(8001, "Dynamic Book", "Dynamic Author");
+    LibSys.add_item(book_ptr);
+    auto result = LibSys.search_by_title("Dynamic Book");
+    EXPECT_EQ(result.size(), 1);
+    EXPECT_EQ(result[0]->get_type(), "Book");
+    EXPECT_EQ(result[0]->to_string(), "Book: Dynamic Book by Dynamic Author");
+    LibSys.add_item(new EBook(8002, "Dynamic EBook", "Dynamic EAuthor"));
+    auto result_ebook = LibSys.search_by_title("Dynamic EBook");
+    EXPECT_EQ(result_ebook.size(), 1);
+    EXPECT_EQ(result_ebook[0]->get_type(), "EBook");
+    EXPECT_EQ(result_ebook[0]->to_string(), "EBook: Dynamic EBook by Dynamic EAuthor");
+}
