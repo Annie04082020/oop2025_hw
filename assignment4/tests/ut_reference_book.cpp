@@ -5,8 +5,8 @@
 class ReferenceBookItemTest : public ::testing::Test
 {
 protected:
-    ReferenceBook a = {4001, "Essential Calculus 2nd Edition", "James Stewart"};
-    ReferenceBook b = {4002, "Advanced Engineering Mathematics", "Peter V. O'Neil"};
+    ReferenceBook a = {7001, "Essential Calculus 2nd Edition", "James Stewart"};
+    ReferenceBook b = {7002, "Advanced Engineering Mathematics", "Peter V. O'Neil"};
 };
 
 TEST_F(ReferenceBookItemTest, GetType)

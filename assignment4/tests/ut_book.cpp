@@ -6,7 +6,7 @@ class BookItemTest : public ::testing::Test
 {
 protected:
     Book a = {5001, "Sherlock Holmes Series", "Arthur Conan Doyle"};
-    Book b = {5002, "Harry Potter", "J.K.Rowling"};
+    Book b = {5002, "Harry Potter", "J. K. Rowling"};
 };
 
 TEST_F(BookItemTest, GetType)
@@ -23,5 +23,5 @@ TEST_F(BookItemTest, GetType2)
 }
 TEST_F(BookItemTest, GetInfo2)
 {
-    EXPECT_EQ(b.to_string(), "Book: Harry Potter by J.K.Rowling");
+    EXPECT_EQ(b.to_string(), "Book: Harry Potter by J. K. Rowling");
 }
