@@ -8,7 +8,7 @@ ReferenceBook::ReferenceBook(long unique_id, std::string title, std::string auth
 std::string ReferenceBook::get_type()
 {
     return "ReferenceBook";
-}
+};
 
 std::string ReferenceBook::to_string()
 {
@@ -16,4 +16,4 @@ std::string ReferenceBook::to_string()
     oss << "ReferenceBook: " << title << " by " << author;
     std::string s = oss.str();
     return s;
-}
+};
