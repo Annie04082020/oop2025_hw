@@ -6,14 +6,18 @@
 
 #include "library_item.h"
 
-class LibraryManagementSystem {
+class LibraryManagementSystem
+{
+private:
+    std::vector<LibraryItem *> library;
+
 public:
     LibraryManagementSystem();
-    
-    void add_item(LibraryItem* item);
-    
-    std::vector<LibraryItem*> search_by_title(std::string title);
-    std::vector<LibraryItem*> search_by_author(std::string author);
+
+    void add_item(LibraryItem *item);
+
+    std::vector<LibraryItem *> search_by_title(std::string title);
+    std::vector<LibraryItem *> search_by_author(std::string author);
 
     int get_total_items();
 };
