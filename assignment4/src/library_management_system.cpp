@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <cctype>
 #include "library_item.h"
 #include "library_management_system.h"
 
@@ -13,9 +14,13 @@ void LibraryManagementSystem::add_item(LibraryItem *item)
 std::vector<LibraryItem *> LibraryManagementSystem::search_by_title(std::string title)
 {
     std::vector<LibraryItem *> result;
+    std::string search_title = title;
+    std::transform(search_title.begin(), search_title.end(), search_title.begin(), ::tolower);
     for (auto item : library)
     {
-        if (item->get_title() == title)
+        std::string item_title = item->get_title();
+        std::transform(item_title.begin(), item_title.end(), item_title.begin(), ::tolower);
+        if (item_title.find(search_title) != std::string::npos)
         {
             result.push_back(item);
         };
