@@ -30,9 +30,13 @@ std::vector<LibraryItem *> LibraryManagementSystem::search_by_title(std::string 
 std::vector<LibraryItem *> LibraryManagementSystem::search_by_author(std::string author)
 {
     std::vector<LibraryItem *> result;
+    std::string search_author = author;
+    std::transform(search_author.begin(), search_author.end(), search_author.begin(), ::tolower);
     for (auto item : library)
     {
-        if (item->get_author() == author)
+        std::string item_author = item->get_author();
+        std::transform(item_author.begin(), item_author.end(), item_author.begin(), ::tolower);
+        if (item_author.find(search_author) != std::string::npos)
         {
             result.push_back(item);
         };
