@@ -17,15 +17,6 @@ protected:
     EBook *d = new EBook(6002, "Power Systems Analysis second edition", "Arthur R.Bergen; Vijay Vittal");
     ReferenceBook *e = new ReferenceBook(7001, "Essential Calculus 2nd Edition", "James Stewart");
     ReferenceBook *f = new ReferenceBook(7002, "Advanced Engineering Mathematics", "Peter V. O'Neil");
-    void TearDown() override
-    {
-        delete a;
-        delete b;
-        delete c;
-        delete d;
-        delete e;
-        delete f;
-    };
 };
 TEST_F(LibraryTest, AddBookItem)
 {
@@ -40,7 +31,6 @@ TEST_F(LibraryTest, AddBookItem)
     EXPECT_EQ(result_after_add[0]->get_unique_id(), 5001);
     EXPECT_EQ(result_after_add[0]->get_type(), "Book");
     EXPECT_EQ(result_after_add[0]->to_string(), "Book: Sherlock Holmes Series by Arthur Conan Doyle");
-    LibSys.clear();
 }
 TEST_F(LibraryTest, AddEBookItem)
 {
@@ -55,7 +45,6 @@ TEST_F(LibraryTest, AddEBookItem)
     EXPECT_EQ(result_after_add[0]->get_unique_id(), 6002);
     EXPECT_EQ(result_after_add[0]->get_type(), "EBook");
     EXPECT_EQ(result_after_add[0]->to_string(), "EBook: Power Systems Analysis second edition by Arthur R.Bergen; Vijay Vittal");
-    LibSys.clear();
 }
 TEST_F(LibraryTest, AddReferenceBookItem)
 {
@@ -70,7 +59,6 @@ TEST_F(LibraryTest, AddReferenceBookItem)
     EXPECT_EQ(result_after_add[0]->get_unique_id(), 7001);
     EXPECT_EQ(result_after_add[0]->get_type(), "ReferenceBook");
     EXPECT_EQ(result_after_add[0]->to_string(), "ReferenceBook: Essential Calculus 2nd Edition by James Stewart");
-    LibSys.clear();
 }
 TEST_F(LibraryTest, SearchByTitle)
 {
@@ -87,7 +75,6 @@ TEST_F(LibraryTest, SearchByTitle)
     EXPECT_EQ(result[0]->get_unique_id(), 5002);
     EXPECT_EQ(result[0]->get_type(), "Book");
     EXPECT_EQ(result[0]->to_string(), "Book: Harry Potter by J. K. Rowling");
-    LibSys.clear();
 }
 TEST_F(LibraryTest, SearchByAuthor)
 {
@@ -103,7 +90,6 @@ TEST_F(LibraryTest, SearchByAuthor)
     EXPECT_EQ(result[0]->get_unique_id(), 6001);
     EXPECT_EQ(result[0]->get_type(), "EBook");
     EXPECT_EQ(result[0]->to_string(), "EBook: Signals Systems and Transforms fifth edition by Charles L. Phillips; John M. Parr; Eve A. Riskin");
-    LibSys.clear();
 }
 TEST_F(LibraryTest, TotalItems)
 {
@@ -131,7 +117,6 @@ TEST_F(LibraryTest, SearchNonExistentItem)
     EXPECT_EQ(result_by_title.size(), 0);
     auto result_by_author = LibSys.search_by_author("Non Existent Author");
     EXPECT_EQ(result_by_author.size(), 0);
-    LibSys.clear();
 }
 TEST_F(LibraryTest, DynamicObjectMethod)
 {
@@ -146,7 +131,6 @@ TEST_F(LibraryTest, DynamicObjectMethod)
     EXPECT_EQ(result_ebook.size(), 1);
     EXPECT_EQ(result_ebook[0]->get_type(), "EBook");
     EXPECT_EQ(result_ebook[0]->to_string(), "EBook: Dynamic EBook by Dynamic EAuthor");
-    LibSys.clear();
 }
 TEST_F(LibraryTest, ClearLibrary)
 {
@@ -174,5 +158,4 @@ TEST_F(LibraryTest, RemoveItem)
     bool removed_non_existent = LibSys.remove_item(9999);
     EXPECT_FALSE(removed_non_existent);
     EXPECT_EQ(LibSys.get_total_items(), 2);
-    LibSys.clear();
 }

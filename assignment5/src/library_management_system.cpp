@@ -25,6 +25,7 @@ bool LibraryManagementSystem::remove_item(long id)
                                                                  { return item != nullptr && item->get_unique_id() == id; });
     if (rmv_item != library.end())
     {
+        delete *rmv_item;
         library.erase(rmv_item);
         return true;
     };
