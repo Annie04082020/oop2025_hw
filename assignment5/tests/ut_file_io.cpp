@@ -5,6 +5,7 @@
 #include "../src/ebook.h"
 #include "../src/reference_book.h"
 #include <filesystem>
+#include <stdexcept>
 #include <fstream>
 class FileIOTest : public ::testing::Test
 {
@@ -49,6 +50,32 @@ TEST_F(FileIOTest, SaveAndLoadFromFile)
     LibSys.load_from_file(test_file_path);
     // Verify the total number of items after loading
     EXPECT_EQ(LibSys.get_total_items(), 6);
+    // Clean up the test file
+    std::filesystem::remove(test_file_path);
+};
+TEST_F(FileIOTest, LoadFromNonExistentFile)
+{
+    // Attempt to load from a non-existent file
+    std::filesystem::path non_existent_file = "non_existent_file.txt";
+    EXPECT_THROW(
+        LibSys.load_from_file(non_existent_file), std::runtime_error);
+    // Verify that no items were loaded
+    EXPECT_EQ(LibSys.get_total_items(), 0);
+}
+TEST_F(FileIOTest, LoadFromMalformedFile)
+{
+    // Create a malformed test file
+    std::ofstream malformed_file(test_file_path);
+    malformed_file << "5001,Book,Sherlock Holmes Series\n";                                                                         // Missing author
+    malformed_file << "6001,EBook,Signals Systems and Transforms fifth edition,Charles L. Phillips; John M. Parr; Eve A. Riskin\n"; // Correct line
+    malformed_file << "7001,ReferenceBook,Essential Calculus 2nd Edition,James Stewart,ExtraField\n";                               // Extra field
+    malformed_file << "InvalidLineWithoutCommas\n";                                                                                 // Completely invalid line
+    malformed_file.close();
+    // Attempt to load from the malformed file
+    EXPECT_NO_THROW(
+        LibSys.load_from_file(test_file_path));
+    // Verify that only the correctly formed line was loaded
+    EXPECT_EQ(LibSys.get_total_items(), 1);
     // Clean up the test file
     std::filesystem::remove(test_file_path);
 };

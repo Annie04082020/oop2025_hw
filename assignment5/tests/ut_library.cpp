@@ -17,6 +17,15 @@ protected:
     EBook *d = new EBook(6002, "Power Systems Analysis second edition", "Arthur R.Bergen; Vijay Vittal");
     ReferenceBook *e = new ReferenceBook(7001, "Essential Calculus 2nd Edition", "James Stewart");
     ReferenceBook *f = new ReferenceBook(7002, "Advanced Engineering Mathematics", "Peter V. O'Neil");
+    void TearDown() override
+    {
+        delete a;
+        delete b;
+        delete c;
+        delete d;
+        delete e;
+        delete f;
+    };
 };
 TEST_F(LibraryTest, AddBookItem)
 {
