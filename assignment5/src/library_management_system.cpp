@@ -3,7 +3,9 @@
 #include <algorithm>
 #include <cctype>
 #include <fstream>
+#include <stdexcept>
 #include <filesystem>
+#include <iostream>
 #include "book.h"
 #include "ebook.h"
 #include "reference_book.h"
@@ -107,7 +109,7 @@ void LibraryManagementSystem::load_from_file(const std::filesystem::path &input_
         }
         if (parts.size() != 4)
         {
-            throw std::runtime_error("Warning: Skipping malformed line (Wrong field count): " + line);
+            std::cerr << "Warning: Skipping malformed line (Wrong field count): " << line << std::endl;
             continue;
         }
         LibraryItem *new_item = nullptr;
@@ -137,13 +139,13 @@ void LibraryManagementSystem::load_from_file(const std::filesystem::path &input_
             }
             else
             {
-                throw std::runtime_error("Warning: Skipping malformed line (Unknown type): " + line);
+                std::cerr << "Warning: Skipping malformed line (Unknown type): " << line << std::endl;
                 continue;
             }
         }
         catch (const std::exception &e)
         {
-            throw std::runtime_error("Warning: Skipping malformed line (Exception): " + line + "-" + e.what());
+            std::cerr << "Warning: Skipping malformed line (Exception): " << line << " - " << e.what() << std::endl;
             continue;
         }
         if (new_item != nullptr)
