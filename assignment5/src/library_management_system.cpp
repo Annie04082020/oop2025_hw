@@ -154,5 +154,9 @@ void LibraryManagementSystem::load_from_file(const std::filesystem::path &input_
 };
 void LibraryManagementSystem::clear()
 {
+    for (LibraryItem *item : library)
+    {
+        delete item;
+    }
     library.clear();
 };
