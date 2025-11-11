@@ -189,7 +189,6 @@ TEST_F(TriangleFunctionTest, Overlap2PointsArea)
 }
 TEST_F(TriangleFunctionTest, ToStringTest)
 {
-
     Triangle a = {p, q, r};
     Triangle b = {p_eq, q_eq, r_eq};
     Triangle c = {p_exb_eq, q_exb_eq, r_exb_eq};

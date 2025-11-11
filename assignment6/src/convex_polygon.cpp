@@ -5,7 +5,7 @@
 #include <vector>
 
 ConvexPolygon::ConvexPolygon() {}
-ConvexPolygon::ConvexPolygon(std::vector<Point *> vertices) : vertices_(vertices)
+ConvexPolygon::ConvexPolygon(std::vector<Point *> vertices)
 {
     for (Point *p : vertices)
     {
@@ -13,7 +13,6 @@ ConvexPolygon::ConvexPolygon(std::vector<Point *> vertices) : vertices_(vertices
         {
             this->vertices_.push_back(new Point(*p));
         };
-        return;
     }
 }
 ConvexPolygon::ConvexPolygon(const ConvexPolygon &other)
