@@ -3,7 +3,7 @@
 #include <cmath>
 #include <string>
 
-Triangle::Triangle(Point p1, Point p2, Point p3) {}
+Triangle::Triangle(Point p1, Point p2, Point p3) : p(p1), q(p2), r(p3) {}
 std::tuple<double, double, double> get_sides(Triangle x)
 {
     double a = distance(x.p, x.q);
