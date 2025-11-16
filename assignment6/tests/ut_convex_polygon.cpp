@@ -66,3 +66,15 @@ TEST_F(ConvexPolygonFunctionTest, RandomFigureArea)
     double ans = 16;
     EXPECT_NEAR(area, ans, 1e-9);
 }
+TEST_F(ConvexPolygonFunctionTest, ToStringTest)
+{
+    ConvexPolygon square = {std::vector<Point *>{&s1, &s2, &s3, &s4}};
+    std::string str = square.to_string();
+    EXPECT_EQ(str, "ConvexPolygon 0.00 0.00 1.00 0.00 1.00 1.00 0.00 1.00");
+    ConvexPolygon rectangle = {std::vector<Point *>{&r1, &r2, &r3, &r4}};
+    std::string str2 = rectangle.to_string();
+    EXPECT_EQ(str2, "ConvexPolygon 0.00 0.00 2.00 0.00 2.00 1.00 0.00 1.00");
+    ConvexPolygon randomfig = {std::vector<Point *>{&p1, &p2, &p3, &p4, &p5}};
+    std::string str3 = randomfig.to_string();
+    EXPECT_EQ(str3, "ConvexPolygon 0.00 0.00 4.00 0.00 4.00 3.00 2.00 5.00 0.00 3.00");
+}

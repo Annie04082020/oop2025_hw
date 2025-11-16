@@ -77,7 +77,7 @@ TEST_F(CircleFunctionTest, ToStringTest)
     std::string str = c.to_string();
     std::string str2 = c2.to_string();
     std::string str3 = c3.to_string();
-    EXPECT_EQ(str, "Circle");
-    EXPECT_EQ(str2, "Circle");
-    EXPECT_EQ(str3, "Circle");
+    EXPECT_EQ(str, "Circle 0.00 0.00 5.00");
+    EXPECT_EQ(str2, "Circle 0.00 0.00 5000000000.00");
+    EXPECT_EQ(str3, "Circle 0.00 0.00 0.00");
 }
