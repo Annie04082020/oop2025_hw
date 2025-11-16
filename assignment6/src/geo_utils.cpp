@@ -101,28 +101,66 @@ void sort_shapes_by_property(std::vector<Shape *> &shapes, const std::string &pr
     { return a->perimeter() < b->perimeter(); };
     auto compare_perimeter_dec = [](Shape *a, Shape *b)
     { return a->perimeter() > b->perimeter(); };
-    if (property.compare("perimeter") == 0 && order.compare("inc") == 0)
+    if (property == "area")
     {
-        std::stable_sort(shapes.begin(), shapes.end(), compare_perimeter_inc);
+        if (order == "inc")
+        {
+            std::stable_sort(shapes.begin(), shapes.end(), compare_area_inc);
+        }
+        else if (order == "dec")
+        {
+            std::stable_sort(shapes.begin(), shapes.end(), compare_area_dec);
+        }
+        else
+        {
+            std::cerr << "Neither inc nor dec" << std::endl;
+            return;
+        }
     }
-    else if (property.compare("perimeter") == 0 && order.compare("inc") == 0)
+    else if (property == "perimeter")
     {
-        std::stable_sort(shapes.begin(), shapes.end(), compare_perimeter_inc);
-    }
-    else if (property.compare("area") == 0 && order.compare("inc") == 0)
-    {
-        std::stable_sort(shapes.begin(), shapes.end(), compare_area_inc);
-    }
-    else if (property.compare("area") == 0 && order.compare("dec") == 0)
-    {
-        std::stable_sort(shapes.begin(), shapes.end(), compare_area_dec);
+        if (order == "inc")
+        {
+            std::stable_sort(shapes.begin(), shapes.end(), compare_perimeter_inc);
+        }
+        else if (order == "dec")
+        {
+            std::stable_sort(shapes.begin(), shapes.end(), compare_perimeter_dec);
+        }
+        else
+        {
+            std::cerr << "Neither inc nor dec" << std::endl;
+            return;
+        }
     }
     else
     {
         std::cerr << "Neither area nor perimeter" << std::endl;
         return;
     }
+    // if (property.compare("perimeter") == 0 && order.compare("inc") == 0)
+    // {
+    //     std::stable_sort(shapes.begin(), shapes.end(), compare_perimeter_inc);
+    // }
+    // else if (property.compare("perimeter") == 0 && order.compare("inc") == 0)
+    // {
+    //     std::stable_sort(shapes.begin(), shapes.end(), compare_perimeter_inc);
+    // }
+    // else if (property.compare("area") == 0 && order.compare("inc") == 0)
+    // {
+    //     std::stable_sort(shapes.begin(), shapes.end(), compare_area_inc);
+    // }
+    // else if (property.compare("area") == 0 && order.compare("dec") == 0)
+    // {
+    //     std::stable_sort(shapes.begin(), shapes.end(), compare_area_dec);
+    // }
+    // else
+    // {
+    //     std::cerr << "Neither area nor perimeter" << std::endl;
+    //     return;
+    // }
 }
+
 void cleanup_shapes(std::vector<Shape *> &shapes)
 {
     for (Shape *shape : shapes)
