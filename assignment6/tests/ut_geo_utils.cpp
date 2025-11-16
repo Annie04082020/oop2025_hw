@@ -171,5 +171,5 @@ TEST_F(GeoIOTest, SortbyAreaDecreasingTest)
     }
     // Clean up dynamically allocated shapes
     cleanup_shapes(shapes);
-    // std::filesystem::remove("test_shapes.txt");
+    std::filesystem::remove("test_shapes.txt");
 }
