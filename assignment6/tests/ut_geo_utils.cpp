@@ -200,3 +200,13 @@ TEST_F(GeoIOTest, SortbyPerimeterDecreasingTest)
     cleanup_shapes(shapes);
     std::filesystem::remove("test_shapes.txt");
 }
+TEST_F(GeoIOTest, CleanUpTest)
+{
+    std::vector<Shape *> shapes_to_clean;
+    shapes_to_clean.push_back(new Circle(c1, radius1));
+    shapes_to_clean.push_back(new Triangle(p, q, r));
+
+    EXPECT_EQ(shapes_to_clean.size(), 2);
+    cleanup_shapes(shapes_to_clean);
+    EXPECT_EQ(shapes_to_clean.size(), 0);
+}
