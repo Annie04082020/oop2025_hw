@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
     catch (const std::exception &e)
     {
         std::cerr << "An error occurred: " << e.what() << std::endl;
-        // (在清理記憶體後返回錯誤)
     }
     for (Shape *shape : shapes)
     {

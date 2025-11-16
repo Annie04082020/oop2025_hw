@@ -52,7 +52,7 @@ TEST_F(ConvexPolygonFunctionTest, RectangleArea)
     double ans = 2;
     EXPECT_NEAR(area, ans, 1e-9);
 }
-TEST_F(ConvexPolygonFunctionTest, RangomFigurePerimeter)
+TEST_F(ConvexPolygonFunctionTest, RandomFigurePerimeter)
 {
     ConvexPolygon randomfig = {std::vector<Point *>{&p1, &p2, &p3, &p4, &p5}};
     double perimeter = randomfig.perimeter();

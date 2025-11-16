@@ -36,11 +36,28 @@ Shape *create_shape_from_string(const std::string &line)
     else if (shape_type == "ConvexPolygon")
     {
         std::vector<Point *> vertices;
-        for (double x, y; ss >> x >> y;)
+        ConvexPolygon *new_poly = nullptr;
+        try
         {
-            vertices.push_back(new Point{x, y});
+            for (double x, y; ss >> x >> y;)
+            {
+                vertices.push_back(new Point{x, y});
+            }
+            new_poly = new ConvexPolygon(vertices);
         }
-        return new ConvexPolygon(vertices);
+        catch (...)
+        {
+            for (Point *p : vertices)
+            {
+                delete p;
+            }
+            throw;
+        }
+        for (Point *p : vertices)
+        {
+            delete p;
+        }
+        return new_poly;
     }
     else
     {

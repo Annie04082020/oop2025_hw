@@ -116,7 +116,6 @@ TEST_F(GeoIOTest, ReadingTestShapesPerimeter)
 TEST_F(GeoIOTest, PolymorphismWithStackObjectsTest)
 {
     // 1. 在「堆疊 (Stack)」上創建子類別的物件
-    //    (我們直接使用 Fixture 中已經宣告好的堆疊物件)
     Circle stack_circle = circle1;
     Triangle stack_triangle = unit_triangle;
     ConvexPolygon stack_polygon = rect;
@@ -126,8 +125,8 @@ TEST_F(GeoIOTest, PolymorphismWithStackObjectsTest)
     Shape *ptr_to_triangle;
     Shape *ptr_to_polygon;
 
-    // 3. 【核心步驟】將「堆疊物件的位址(&)」指派給「基底類別指標」
-    //    這就是助教回饋中所說的 "reference assign給 BaseClass*"
+    // 3. 將「堆疊物件的位址(&)」指派給「基底類別指標」
+    //"reference assign給 BaseClass*"
     ptr_to_circle = &stack_circle;
     ptr_to_triangle = &stack_triangle;
     ptr_to_polygon = &stack_polygon;
@@ -168,6 +167,34 @@ TEST_F(GeoIOTest, SortbyAreaDecreasingTest)
     for (size_t i = 1; i < shapes.size(); ++i)
     {
         EXPECT_GE(shapes[i - 1]->area(), shapes[i]->area());
+    }
+    // Clean up dynamically allocated shapes
+    cleanup_shapes(shapes);
+    std::filesystem::remove("test_shapes.txt");
+}
+TEST_F(GeoIOTest, SortbyPerimeterIncreasingTest)
+{
+    EXPECT_NO_THROW(
+        write_shapes_to_file(std::vector<Shape *>{&rect, &randomfig, &circle1, &circle2, &unit_triangle, &equal_triangle, &right_triangle}, test_file));
+    std::vector<Shape *> shapes = read_shapes_from_file("test_shapes.txt");
+    EXPECT_NO_THROW(sort_shapes_by_property(shapes, "perimeter", "inc"));
+    for (size_t i = 1; i < shapes.size(); ++i)
+    {
+        EXPECT_LE(shapes[i - 1]->perimeter(), shapes[i]->perimeter());
+    }
+    // Clean up dynamically allocated shapes
+    cleanup_shapes(shapes);
+    std::filesystem::remove("test_shapes.txt");
+}
+TEST_F(GeoIOTest, SortbyPerimeterDecreasingTest)
+{
+    EXPECT_NO_THROW(
+        write_shapes_to_file(std::vector<Shape *>{&rect, &randomfig, &circle1, &circle2, &unit_triangle, &equal_triangle, &right_triangle}, test_file));
+    std::vector<Shape *> shapes = read_shapes_from_file("test_shapes.txt");
+    EXPECT_NO_THROW(sort_shapes_by_property(shapes, "perimeter", "dec"));
+    for (size_t i = 1; i < shapes.size(); ++i)
+    {
+        EXPECT_GE(shapes[i - 1]->perimeter(), shapes[i]->perimeter());
     }
     // Clean up dynamically allocated shapes
     cleanup_shapes(shapes);
