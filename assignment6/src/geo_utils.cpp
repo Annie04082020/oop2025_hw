@@ -138,27 +138,6 @@ void sort_shapes_by_property(std::vector<Shape *> &shapes, const std::string &pr
         std::cerr << "Neither area nor perimeter" << std::endl;
         return;
     }
-    // if (property.compare("perimeter") == 0 && order.compare("inc") == 0)
-    // {
-    //     std::stable_sort(shapes.begin(), shapes.end(), compare_perimeter_inc);
-    // }
-    // else if (property.compare("perimeter") == 0 && order.compare("inc") == 0)
-    // {
-    //     std::stable_sort(shapes.begin(), shapes.end(), compare_perimeter_inc);
-    // }
-    // else if (property.compare("area") == 0 && order.compare("inc") == 0)
-    // {
-    //     std::stable_sort(shapes.begin(), shapes.end(), compare_area_inc);
-    // }
-    // else if (property.compare("area") == 0 && order.compare("dec") == 0)
-    // {
-    //     std::stable_sort(shapes.begin(), shapes.end(), compare_area_dec);
-    // }
-    // else
-    // {
-    //     std::cerr << "Neither area nor perimeter" << std::endl;
-    //     return;
-    // }
 }
 
 void cleanup_shapes(std::vector<Shape *> &shapes)
