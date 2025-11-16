@@ -78,3 +78,25 @@ TEST_F(ConvexPolygonFunctionTest, ToStringTest)
     std::string str3 = randomfig.to_string();
     EXPECT_EQ(str3, "ConvexPolygon 0.00 0.00 4.00 0.00 4.00 3.00 2.00 5.00 0.00 3.00");
 }
+TEST_F(ConvexPolygonFunctionTest, ConcaveCheckShouldFail)
+{
+    Point p1{0, 0};
+    Point p2{4, 0};
+    Point p3{2, 2};
+    Point p4{4, 4};
+    Point p5{0, 4};
+    std::vector<Point *> concave_points = {&p1, &p2, &p3, &p4, &p5};
+    EXPECT_FALSE(ConvexPolygon::ConvexCheck(concave_points));
+}
+TEST_F(ConvexPolygonFunctionTest, ConcavePolygonShouldThrowException)
+{
+    Point p1{0, 0};
+    Point p2{4, 0};
+    Point p3{2, 2};
+    Point p4{4, 4};
+    Point p5{0, 4};
+    std::vector<Point *> concave_points = {&p1, &p2, &p3, &p4, &p5};
+    EXPECT_THROW(
+        new ConvexPolygon(concave_points),
+        std::runtime_error);
+}

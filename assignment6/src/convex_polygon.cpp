@@ -5,10 +5,52 @@
 #include <vector>
 #include <iomanip>
 #include <sstream>
+#include <tuple>
+#include <stdexcept>
+#include <iostream>
+
+bool ConvexPolygon::ConvexCheck(std::vector<Point *> vertices)
+{
+    if (vertices.size() < 3)
+    {
+        std::cerr << "A polygon must have at least 3 vertices to check convexity." << std::endl;
+        return false;
+    }
+    bool is_convex = true;
+    int n = vertices.size();
+    int sign = 0;
+    double first_cross_product = 0.0;
+    for (int i = 0; i < n; i++)
+    {
+        Point *p1 = vertices[(i + n - 1) % n];
+        Point *p2 = vertices[i];
+        Point *p3 = vertices[(i + 1) % n];
+        std::tuple<double, double> v1 = std::make_tuple(p2->x - p1->x, p2->y - p1->y);
+        std::tuple<double, double> v2 = std::make_tuple(p3->x - p2->x, p3->y - p2->y);
+        double cross_product = (std::get<0>(v1) * std::get<1>(v2)) - (std::get<1>(v1) * std::get<0>(v2));
+        if (cross_product != 0)
+        {
+            if (first_cross_product == 0.0)
+            {
+                first_cross_product = cross_product;
+            }
+            else if (cross_product * first_cross_product < 0)
+            {
+                is_convex = false;
+                break;
+            }
+        }
+    }
+    return is_convex;
+}
 
 ConvexPolygon::ConvexPolygon() {}
 ConvexPolygon::ConvexPolygon(std::vector<Point *> vertices)
 {
+    if (!ConvexCheck(vertices))
+    {
+        throw std::runtime_error("Polygon is concave");
+    }
     for (Point *p : vertices)
     {
         if (p != nullptr)
