@@ -3,6 +3,8 @@
 #include <cmath>
 #include <string>
 #include <vector>
+#include <iomanip>
+#include <sstream>
 
 ConvexPolygon::ConvexPolygon() {}
 ConvexPolygon::ConvexPolygon(std::vector<Point *> vertices)
@@ -81,5 +83,12 @@ double ConvexPolygon::perimeter() const
 }
 std::string ConvexPolygon::to_string() const
 {
-    return "ConvexPolygon";
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(2);
+    ss << "ConvexPolygon";
+    for (const Point *p : vertices_)
+    {
+        ss << " " << p->x << " " << p->y;
+    }
+    return ss.str();
 }

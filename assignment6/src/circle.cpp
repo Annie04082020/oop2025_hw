@@ -2,6 +2,8 @@
 #include "circle.h"
 #include <string>
 #include <cmath>
+#include <iomanip>
+#include <sstream>
 #define _USE_MATH_DEFINES
 
 Circle::Circle(Point c, double r) : center(c), radius(r) {}
@@ -15,5 +17,8 @@ double Circle::perimeter() const
 }
 std::string Circle::to_string() const
 {
-    return "Circle";
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(2);
+    ss << "Circle " << center.x << " " << center.y << " " << radius;
+    return ss.str();
 }

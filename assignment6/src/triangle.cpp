@@ -2,6 +2,8 @@
 #include "triangle.h"
 #include <cmath>
 #include <string>
+#include <iomanip>
+#include <sstream>
 
 Triangle::Triangle(Point p1, Point p2, Point p3) : p(p1), q(p2), r(p3) {}
 std::tuple<double, double, double> get_sides(Triangle x)
@@ -27,5 +29,8 @@ double Triangle::perimeter() const
 }
 std::string Triangle::to_string() const
 {
-    return "Triangle";
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(2);
+    ss << "Triangle " << p.x << " " << p.y << " " << q.x << " " << q.y << " " << r.x << " " << r.y;
+    return ss.str();
 }
