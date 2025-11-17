@@ -210,3 +210,19 @@ TEST_F(GeoIOTest, CleanUpTest)
     cleanup_shapes(shapes_to_clean);
     EXPECT_EQ(shapes_to_clean.size(), 0);
 }
+TEST_F(GeoIOTest, ReadingTestShapesToString)
+{
+    EXPECT_NO_THROW(
+        write_shapes_to_file(std::vector<Shape *>{&rect, &randomfig, &circle1, &circle2, &unit_triangle, &equal_triangle, &right_triangle}, test_file));
+    std::vector<Shape *> shapes = read_shapes_from_file(test_file);
+    // Rectangle (ConvexPolygon)
+    EXPECT_EQ(shapes[0]->to_string(), rect.to_string());
+    // RandomFig (ConvexPolygon)
+    EXPECT_EQ(shapes[1]->to_string(), randomfig.to_string());
+    // Circle1
+    EXPECT_EQ(shapes[2]->to_string(), circle1.to_string());
+    // Unit Triangle
+    EXPECT_EQ(shapes[4]->to_string(), unit_triangle.to_string());
+    cleanup_shapes(shapes);
+    std::filesystem::remove(test_file);
+}
