@@ -10,3 +10,14 @@
     1. Define expected outputs 
     2. Write the test
     3. Write the corresponding code to pass the test  
+
+Answer Key:
+1. 
+    1. Understand the Problem
+    2. Devise a Plan
+    3. Carry out the Plan
+    4. Look back and Reflect
+2. 
+    1. Red: Write a Failing Test
+    2. Green: Write Code to Pass the Test
+    3. Refactor: Improve the Code
