@@ -29,7 +29,7 @@ public:
     ~BankAccount();
     // Overloaded operator +=,  // receive double and return address
     // operator(double amount);
-    BankAccount &operator+(double amount);
+    BankAccount &operator+=(double amount);
 
     long get_id() const;
     std::string get_owner() const;

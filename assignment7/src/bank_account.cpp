@@ -7,9 +7,7 @@
 #include "transaction.h"
 
 long BankAccount::id_counter = 1;
-long generate_id()
-{
-}
+
 BankAccount::BankAccount(const std::string &owner, const std::string &bank_code) : owner(owner), bank_code(bank_code), balance(0)
 {
     this->id = id_counter++;
@@ -51,7 +49,7 @@ BankAccount::~BankAccount()
     }
     history.clear();
 }
-BankAccount &BankAccount::operator+(double amount)
+BankAccount &BankAccount::operator+=(double amount)
 {
     this->deposit(amount);
     return *this;
@@ -97,6 +95,10 @@ void BankAccount::withdraw(double amount)
     {
         throw std::invalid_argument("Must withdraw a positive amount.");
     }
+    else if (amount > this->balance)
+    {
+        throw std::invalid_argument("insufficient balance");
+    }
     else
     {
         this->balance -= amount;
@@ -107,16 +109,17 @@ void BankAccount::withdraw(double amount)
 }
 void BankAccount::export_to_csv(const std::filesystem::path &folder_path) const
 {
-
-    std::ofstream output_file(folder_path);
+    std::string filename = std::to_string(this->id) + "_" + this->owner + "_" + this->bank_code + ".csv";
+    std::filesystem::path full_path = folder_path / filename;
+    std::ofstream output_file(full_path);
     if (!output_file.is_open())
     {
         throw std::invalid_argument("Could not open file for writing: " + folder_path.string());
-        return;
     }
+    output_file << "Type,Amount,Balance After" << "\n";
+
     for (const auto &item : this->get_history())
     {
-        output_file << "Type,Amount,Balance After" << "\n";
         if (item)
         {
             output_file << item->get_type() << "," << item->get_amount() << "," << item->get_balance_after() << "\n";
