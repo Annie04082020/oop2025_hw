@@ -6,7 +6,9 @@
 class Transaction {
 private:
     // Attributes
-
+    const std::string& type;
+    double amount;
+    double balance_after;
 public:
     Transaction(const std::string& type, double amount, double balance_after);
     std::string get_type() const;

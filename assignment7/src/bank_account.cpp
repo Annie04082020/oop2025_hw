@@ -1,0 +1,125 @@
+#include <string>
+#include <vector>
+#include <filesystem>
+#include <fstream>
+#include <stdexcept>
+#include "bank_account.h"
+#include "transaction.h"
+
+long BankAccount::id_counter = 1;
+long generate_id()
+{
+}
+BankAccount::BankAccount(const std::string &owner, const std::string &bank_code) : owner(owner), bank_code(bank_code), balance(0)
+{
+    this->id = id_counter++;
+}
+
+BankAccount::BankAccount(const BankAccount &other)
+{
+    this->owner = other.owner;
+    this->bank_code = other.bank_code;
+    this->id = id_counter++;
+    this->balance = 0;
+    this->history.clear();
+}
+BankAccount &BankAccount::operator=(const BankAccount &other)
+{
+    if (this != &other)
+    {
+        for (Transaction *p : this->history)
+        {
+            delete p;
+        }
+        this->history.clear();
+        this->owner = other.owner;
+        this->bank_code = other.bank_code;
+        this->id = other.id;
+        this->balance = other.balance;
+        for (const Transaction *other_history : other.history)
+        {
+            this->history.push_back(new Transaction(*other_history));
+        }
+    }
+    return *this;
+}
+BankAccount::~BankAccount()
+{
+    for (Transaction *p : history)
+    {
+        delete p;
+    }
+    history.clear();
+}
+BankAccount &BankAccount::operator+(double amount)
+{
+    this->deposit(amount);
+    return *this;
+}
+
+long BankAccount::get_id() const
+{
+    return this->id;
+}
+std::string BankAccount::get_owner() const
+{
+    return this->owner;
+}
+std::string BankAccount::get_bank_code() const
+{
+    return this->bank_code;
+}
+double BankAccount::get_balance() const
+{
+    return this->balance;
+}
+std::vector<Transaction *> BankAccount::get_history() const
+{
+    return this->history;
+}
+void BankAccount::deposit(double amount)
+{
+    // this->balance+=amount;
+    if (amount <= 0)
+    {
+        throw std::invalid_argument("Must deposit a positive amount.");
+    }
+    else
+    {
+        this->balance += amount;
+        Transaction *deposit = new Transaction{"Deposit", amount, this->balance};
+        this->history.push_back(deposit);
+    };
+}
+void BankAccount::withdraw(double amount)
+{
+    if (amount <= 0)
+    {
+        throw std::invalid_argument("Must withdraw a positive amount.");
+    }
+    else
+    {
+        this->balance -= amount;
+        Transaction *withdraw = new Transaction{"Withdraw", amount, this->balance};
+        this->history.push_back(withdraw);
+        return;
+    };
+}
+void BankAccount::export_to_csv(const std::filesystem::path &folder_path) const
+{
+
+    std::ofstream output_file(folder_path);
+    if (!output_file.is_open())
+    {
+        throw std::invalid_argument("Could not open file for writing: " + folder_path.string());
+        return;
+    }
+    for (const auto &item : this->get_history())
+    {
+        output_file << "Type,Amount,Balance After" << "\n";
+        if (item)
+        {
+            output_file << item->get_type() << "," << item->get_amount() << "," << item->get_balance_after() << "\n";
+        }
+    }
+}
