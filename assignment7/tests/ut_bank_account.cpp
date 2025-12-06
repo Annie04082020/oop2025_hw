@@ -53,3 +53,17 @@ TEST_F(BankSystemTest, Withdraw_InsufficientBalance)
     A.deposit(200.00);
     EXPECT_THROW(A.withdraw(300.00), std::invalid_argument);
 }
+TEST_F(BankSystemTest, OperatorPlusEqual)
+{
+    BankAccount A(owner_A, bank_code_A);
+    A += 600.00;
+    EXPECT_EQ(A.get_balance(), 600.00);
+}
+TEST_F(BankSystemTest, CSV)
+{
+    BankAccount A(owner_A, bank_code_A);
+    A += 600.00;
+    A.export_to_csv("test_folder");
+    // std::filesystem::path filepath = "test_folder/" + std::to_string(A.get_id()) + "_" + A.get_owner() + "_" + A.get_bank_code() + ".csv";
+    // EXPECT_TRUE(std::filesystem::exists(filepath));
+}

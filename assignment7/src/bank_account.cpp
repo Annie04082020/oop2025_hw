@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include <stdexcept>
+#include <iomanip>
 #include "bank_account.h"
 #include "transaction.h"
 
@@ -85,7 +86,8 @@ void BankAccount::deposit(double amount)
     else
     {
         this->balance += amount;
-        Transaction *deposit = new Transaction{"Deposit", amount, this->balance};
+        static const std::string type = "Deposit";
+        Transaction *deposit = new Transaction{type, amount, this->balance};
         this->history.push_back(deposit);
     };
 }
@@ -102,13 +104,18 @@ void BankAccount::withdraw(double amount)
     else
     {
         this->balance -= amount;
-        Transaction *withdraw = new Transaction{"Withdraw", amount, this->balance};
+        static const std::string type = "Withdraw";
+        Transaction *withdraw = new Transaction{type, amount, this->balance};
         this->history.push_back(withdraw);
         return;
     };
 }
 void BankAccount::export_to_csv(const std::filesystem::path &folder_path) const
 {
+    if (!std::filesystem::exists(folder_path))
+    {
+        std::filesystem::create_directories(folder_path);
+    }
     std::string filename = std::to_string(this->id) + "_" + this->owner + "_" + this->bank_code + ".csv";
     std::filesystem::path full_path = folder_path / filename;
     std::ofstream output_file(full_path);
@@ -120,9 +127,11 @@ void BankAccount::export_to_csv(const std::filesystem::path &folder_path) const
 
     for (const auto &item : this->get_history())
     {
-        if (item)
+        if (item != nullptr)
         {
-            output_file << item->get_type() << "," << item->get_amount() << "," << item->get_balance_after() << "\n";
+            output_file << item->get_type() << ","
+                        << std::fixed << std::setprecision(2) << item->get_amount() << ","
+                        << std::fixed << std::setprecision(2) << item->get_balance_after() << "\n";
         }
     }
 }
