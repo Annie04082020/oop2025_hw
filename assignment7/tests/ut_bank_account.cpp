@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include <cmath>
+#include <filesystem>
+#include <fstream>
 #include "../src/bank_account.h"
 class BankSystemTest : public ::testing::Test
 {
@@ -63,10 +65,34 @@ TEST_F(BankSystemTest, CSVoutput)
 {
     BankAccount A(owner_A, bank_code_A);
     A += 600.00;
-    EXPECT_NO_THROW(
-        A.export_to_csv("test"););
+    EXPECT_NO_THROW(A.export_to_csv("test"));
     std::filesystem::path filepath = "test/history_" + std::to_string(A.get_id()) + "_" + A.get_owner() + "_" + A.get_bank_code() + ".csv";
-    EXPECT_TRUE(std::filesystem::exists(filepath));
+    ASSERT_TRUE(std::filesystem::exists(filepath));
+
+    {
+        std::ifstream read_output_file(filepath);
+        ASSERT_TRUE(read_output_file.is_open());
+        std::string line;
+        int line_count = 0;
+        std::vector<std::string> expected_lines = {
+            "Transaction Type,Amount,Balance After",
+            "Deposit,600.00,600.00"};
+        while (std::getline(read_output_file, line))
+        {
+            if (!line.empty() && line.back() == '\r')
+                line.pop_back();
+            if (line_count >= expected_lines.size())
+            {
+                FAIL();
+                break;
+            }
+            EXPECT_EQ(line, expected_lines[line_count]);
+            line_count++;
+        }
+        EXPECT_EQ(line_count, expected_lines.size());
+        read_output_file.close();
+    }
+
     std::filesystem::remove_all("test");
     EXPECT_FALSE(std::filesystem::exists(filepath));
 }
