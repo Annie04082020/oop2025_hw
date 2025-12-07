@@ -7,23 +7,44 @@ template <typename RandomIt>
 void bubble_sort(RandomIt first, RandomIt last)
 {
     // Implementation
+    if (first == last)
+        return;
+    bool swapped = true;
+    while (swapped)
+    {
+        swapped = false;
+        for (auto it = first; it != last - 1; it++)
+        {
+            // Default ascending
+            if (*it > *(it + 1))
+            {
+                std::swap(*it, *(it + 1));
+                swapped = true;
+            }
+        }
+        last--;
+    }
 }
 
 template <typename RandomIt, typename Compare>
 void bubble_sort(RandomIt first, RandomIt last, Compare comp)
 {
+    if (first == last)
+        return;
     // Implementation
-    for (int i = 0; i < n - 1; i++)
+    bool swapped = true;
+    while (swapped)
     {
-        for (int j = 0; j < n - i - 1; j++)
+        swapped = false;
+        for (auto it = first; it != last - 1; it++)
         {
-            if (comp(arr[j + 1], arr[j]))
+            if (comp(*(it + 1), *it))
             {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
+                std::swap(*it, *(it + 1));
+                swapped = true;
             }
         }
+        last--;
     }
 }
 
