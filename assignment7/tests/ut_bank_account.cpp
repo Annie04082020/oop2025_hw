@@ -59,11 +59,14 @@ TEST_F(BankSystemTest, OperatorPlusEqual)
     A += 600.00;
     EXPECT_EQ(A.get_balance(), 600.00);
 }
-TEST_F(BankSystemTest, CSV)
+TEST_F(BankSystemTest, CSVoutput)
 {
     BankAccount A(owner_A, bank_code_A);
     A += 600.00;
-    A.export_to_csv("test");
+    EXPECT_NO_THROW(
+        A.export_to_csv("test"););
     std::filesystem::path filepath = "test/history_" + std::to_string(A.get_id()) + "_" + A.get_owner() + "_" + A.get_bank_code() + ".csv";
     EXPECT_TRUE(std::filesystem::exists(filepath));
+    std::filesystem::remove_all("test");
+    EXPECT_FALSE(std::filesystem::exists(filepath));
 }

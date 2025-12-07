@@ -9,11 +9,12 @@
 
 long BankAccount::id_counter = 1;
 
+// Constructor (bankaccount initialization)
 BankAccount::BankAccount(const std::string &owner, const std::string &bank_code) : owner(owner), bank_code(bank_code), balance(0)
 {
     this->id = id_counter++;
 }
-
+// Copy Constructor
 BankAccount::BankAccount(const BankAccount &other)
 {
     this->owner = other.owner;
@@ -22,6 +23,7 @@ BankAccount::BankAccount(const BankAccount &other)
     this->balance = 0;
     this->history.clear();
 }
+// Copy Assignment Operator
 BankAccount &BankAccount::operator=(const BankAccount &other)
 {
     if (this != &other)
@@ -42,6 +44,7 @@ BankAccount &BankAccount::operator=(const BankAccount &other)
     }
     return *this;
 }
+// Destructor
 BankAccount::~BankAccount()
 {
     for (Transaction *p : history)
@@ -50,6 +53,7 @@ BankAccount::~BankAccount()
     }
     history.clear();
 }
+// Overloaded operator +=
 BankAccount &BankAccount::operator+=(double amount)
 {
     this->deposit(amount);
@@ -99,7 +103,7 @@ void BankAccount::withdraw(double amount)
     }
     else if (amount > this->balance)
     {
-        throw std::invalid_argument("insufficient balance");
+        throw std::invalid_argument("Insufficient balance");
     }
     else
     {
