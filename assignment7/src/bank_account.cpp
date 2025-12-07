@@ -6,7 +6,6 @@
 #include <iomanip>
 #include "bank_account.h"
 #include "transaction.h"
-#include <iostream> // 為了使用 std::cout
 
 long BankAccount::id_counter = 1;
 
@@ -124,7 +123,7 @@ void BankAccount::export_to_csv(const std::filesystem::path &folder_path) const
     {
         throw std::invalid_argument("Could not open file for writing: " + folder_path.string());
     }
-    output_file << "Type,Amount,Balance After" << "\n";
+    output_file << "Transaction Type,Amount,Balance After" << "\n";
 
     for (const auto &item : this->get_history())
     {
