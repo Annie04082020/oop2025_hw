@@ -70,3 +70,57 @@ TEST_F(BankSystemTest, CSVoutput)
     std::filesystem::remove_all("test");
     EXPECT_FALSE(std::filesystem::exists(filepath));
 }
+TEST_F(BankSystemTest, TransactionHistory)
+{
+    BankAccount A(owner_A, bank_code_A);
+    A.deposit(500.00);
+    A.withdraw(200.00);
+    A.deposit(300.00);
+    std::vector<Transaction *> history = A.get_history();
+    ASSERT_EQ(history.size(), 3);
+    EXPECT_EQ(history[0]->get_type(), "Deposit");
+    EXPECT_DOUBLE_EQ(history[0]->get_amount(), 500.00);
+    EXPECT_DOUBLE_EQ(history[0]->get_balance_after(), 500.00);
+    EXPECT_EQ(history[1]->get_type(), "Withdraw");
+    EXPECT_DOUBLE_EQ(history[1]->get_amount(), 200.00);
+    EXPECT_DOUBLE_EQ(history[1]->get_balance_after(), 300.00);
+    EXPECT_EQ(history[2]->get_type(), "Deposit");
+    EXPECT_DOUBLE_EQ(history[2]->get_amount(), 300.00);
+    EXPECT_DOUBLE_EQ(history[2]->get_balance_after(), 600.00);
+}
+TEST_F(BankSystemTest, DepositNegativeAmount)
+{
+    BankAccount A(owner_A, bank_code_A);
+    try
+    {
+        A.deposit(-500);
+        FAIL() << "Expected std::invalid_argument";
+    }
+    catch (const std::invalid_argument &e)
+    {
+        EXPECT_STREQ(e.what(), "Must deposit a positive amount.");
+    }
+    catch (...)
+    {
+        FAIL() << "Expected std::invalid_argument, but got different exception";
+    }
+    EXPECT_THROW(A.deposit(-500), std::invalid_argument);
+}
+TEST_F(BankSystemTest, WithdrawNegativeAmount)
+{
+    BankAccount A(owner_A, bank_code_A);
+    try
+    {
+        A.withdraw(-500);
+        FAIL() << "Expected std::invalid_argument";
+    }
+    catch (const std::invalid_argument &e)
+    {
+        EXPECT_STREQ(e.what(), "Must withdraw a positive amount.");
+    }
+    catch (...)
+    {
+        FAIL() << "Expected std::invalid_argument, but got different exception";
+    }
+    EXPECT_THROW(A.withdraw(-500), std::invalid_argument);
+}

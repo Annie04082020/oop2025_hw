@@ -50,3 +50,40 @@ TEST_F(BankSystemRuleofThreeTest, CopyAsssignmentSelfAssign)
     EXPECT_EQ(A.get_balance(), 300);
     EXPECT_EQ(A.get_history().size(), 2);
 }
+TEST_F(BankSystemRuleofThreeTest, Destructor)
+{
+    EXPECT_EQ(Transaction::alive_count, 0);
+    {
+        BankAccount A(owner_A, bank_code_A);
+        A += 100;
+        EXPECT_EQ(A.get_history().size(), 1);
+        EXPECT_EQ(Transaction::alive_count, 1);
+        A += 200;
+        EXPECT_EQ(A.get_history().size(), 2);
+        EXPECT_EQ(Transaction::alive_count, 2);
+    }
+    EXPECT_EQ(Transaction::alive_count, 0);
+}
+TEST_F(BankSystemRuleofThreeTest, OverloadOperator)
+{
+    BankAccount A(owner_A, bank_code_A);
+    A += 150.00;
+    EXPECT_EQ(A.get_balance(), 150.00);
+    A += 350.00;
+    EXPECT_EQ(A.get_balance(), 500.00);
+    EXPECT_THROW(A += -100.00, std::invalid_argument);
+    try
+    {
+        A += -100.00;
+        FAIL() << "Expected std::invalid_argument";
+    }
+    catch (const std::invalid_argument &e)
+    {
+        EXPECT_STREQ(e.what(), "Must deposit a positive amount.");
+    }
+    catch (...)
+    {
+        FAIL() << "Expected std::invalid_argument, but got different exception";
+    }
+    EXPECT_EQ(A.get_balance(), 500.00);
+}

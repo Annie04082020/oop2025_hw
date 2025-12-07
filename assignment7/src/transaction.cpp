@@ -10,7 +10,7 @@ Transaction::Transaction(const std::string &type, double amount, double balance_
 Transaction::Transaction(const Transaction &other)
     : type(other.type), amount(other.amount), balance_after(other.balance_after)
 {
-    alive_count++;
+    alive_count++; 
 }
 Transaction::~Transaction()
 {
