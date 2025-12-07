@@ -103,7 +103,7 @@ void BankAccount::withdraw(double amount)
     }
     else if (amount > this->balance)
     {
-        throw std::invalid_argument("Insufficient balance");
+        throw std::invalid_argument("Insufficient balance.");
     }
     else
     {
