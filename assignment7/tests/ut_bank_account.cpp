@@ -65,7 +65,7 @@ TEST_F(BankSystemTest, CSV)
     BankAccount A(owner_A, bank_code_A);
     A += 600.00;
     A.export_to_csv("test");
-    std::filesystem::path filepath = "test/" + std::to_string(A.get_id()) + "_" + A.get_owner() + "_" + A.get_bank_code() + ".csv";
+    std::filesystem::path filepath = "test/history_" + std::to_string(A.get_id()) + "_" + A.get_owner() + "_" + A.get_bank_code() + ".csv";
     std::cout << "Checking file at: " << filepath << std::endl; // 輸出檔案路徑以便調試
     EXPECT_TRUE(std::filesystem::exists(filepath));
 }
