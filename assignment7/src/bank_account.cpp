@@ -6,6 +6,7 @@
 #include <iomanip>
 #include "bank_account.h"
 #include "transaction.h"
+#include <iostream> // 為了使用 std::cout
 
 long BankAccount::id_counter = 1;
 
@@ -118,6 +119,17 @@ void BankAccount::export_to_csv(const std::filesystem::path &folder_path) const
     }
     std::string filename = std::to_string(this->id) + "_" + this->owner + "_" + this->bank_code + ".csv";
     std::filesystem::path full_path = folder_path / filename;
+
+    // =========== [DEBUG 區塊開始] ===========
+    std::cout << "------------------------------------------------" << std::endl;
+    std::cout << "[DEBUG] 目前所在的資料夾 (Current Path): " << std::filesystem::current_path() << std::endl;
+    std::cout << "[DEBUG] 傳入的目標資料夾 (Folder Path): " << folder_path.string() << std::endl;
+    std::cout << "[DEBUG] 組合出來的檔名 (Filename): " << filename << std::endl;
+    std::cout << "[DEBUG] 最終完整路徑 (Full Path): " << full_path.string() << std::endl;
+    std::cout << "[DEBUG] 資料夾是否存在? " << (std::filesystem::exists(folder_path) ? "Yes" : "No") << std::endl;
+    std::cout << "------------------------------------------------" << std::endl;
+    // =========== [DEBUG 區塊結束] ===========
+
     std::ofstream output_file(full_path);
     if (!output_file.is_open())
     {
