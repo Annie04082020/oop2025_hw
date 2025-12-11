@@ -2,11 +2,11 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # echo $SCRIPT_DIR
 DATA_DIR="$SCRIPT_DIR/assignment8"
-echo $DATA_DIR
-TARGET_DIR="$SCRIPT_DIR/../oop2025f_111310452_hw"
-echo $TARGET_DIR
+# echo $DATA_DIR
+HOMEWORK_DIR="$SCRIPT_DIR/../oop2025f_111310452_hw"
+# echo $HOMEWORK_DIR
 
-cp -r CMakeLists.txt README.md src tests "$TARGET_DIR"
+cp -r CMakeLists.txt README.md src tests "$HOMEWORK_DIR"
 
 # push (homwerk copy)
 
@@ -22,8 +22,6 @@ git pull
 # git config --global --unset credential.helper
 
 # push (Jenkins, handin)
-HOMEWORK_DIR="$(dirname "$SCRIPT_DIR")/oop2025f_111310452_hw/"
-echo "HOMEWORK_DIR: $HOMEWORK_DIR"
 cd "$HOMEWORK_DIR" 
 git add .
 git add -A
