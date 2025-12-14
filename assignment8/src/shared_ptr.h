@@ -1,6 +1,7 @@
 #ifndef SHARED_PTR_H
 #define SHARED_PTR_H
 #include <stdexcept>
+#include <optional>
 
 template <typename T>
 class SharedPtr
@@ -80,7 +81,7 @@ T &SharedPtr<T>::operator*() const
 {
     if (this->_ptr == nullptr)
     {
-        throw std::runtime_error("This pointer owns nothing.");
+        throw std::bad_optional_access();
     }
     return *this->_ptr;
 }
