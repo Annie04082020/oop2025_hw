@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <memory>
-#include "shared_ptr.h"
+#include "../src/shared_ptr.h"
 
 class SharedPtrTest : public ::testing::Test
 {
