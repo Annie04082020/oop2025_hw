@@ -7,20 +7,21 @@ template <typename T>
 class SharedPtr
 {
 public:
+    // Default Constructor
     SharedPtr();
-
+    // Share pointer
     explicit SharedPtr(T *rawPtr);
-
+    // Copy Constructor
     SharedPtr(const SharedPtr<T> &other);
-
+    // Destructor
     ~SharedPtr();
-
+    // Copy Assignment Operator
     SharedPtr<T> &operator=(const SharedPtr<T> &other);
-
+    // Dereferencer
     T &operator*() const;
-
+    // Get reference count
     int reference_count() const;
-
+    // Reset Shared pointer
     void reset();
 
 private:
@@ -101,9 +102,7 @@ void SharedPtr<T>::reset()
     {
         return;
     }
-
     (*_ref_count)--;
-
     if (*_ref_count == 0)
     {
         delete _ptr;
