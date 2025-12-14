@@ -42,7 +42,7 @@ SharedPtr<T>::SharedPtr(const SharedPtr<T> &other) : _ptr(other._ptr), _ref_coun
 {
     if (_ref_count != nullptr)
     {
-        *(_ref_count)++;
+        (*_ref_count)++;
     }
 }
 template <typename T>
