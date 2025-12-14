@@ -2,6 +2,7 @@
 #define SHARED_PTR_H
 #include <stdexcept>
 #include <optional>
+#include <mutex>
 
 template <typename T>
 class SharedPtr
@@ -27,23 +28,26 @@ public:
 private:
     T *_ptr;
     int *_ref_count;
+    std::mutex *_mtx;
 };
 
 template <typename T>
 SharedPtr<T>::SharedPtr() : _ptr(nullptr), _ref_count(nullptr) {}
 template <typename T>
-SharedPtr<T>::SharedPtr(T *rawPtr) : _ptr(rawPtr), _ref_count(nullptr)
+SharedPtr<T>::SharedPtr(T *rawPtr) : _ptr(rawPtr), _ref_count(nullptr), _mtx(nullptr)
 {
     if (_ptr != nullptr)
     {
         _ref_count = new int(1);
+        _mtx = new std::mutex();
     }
 }
 template <typename T>
-SharedPtr<T>::SharedPtr(const SharedPtr<T> &other) : _ptr(other._ptr), _ref_count(other._ref_count)
+SharedPtr<T>::SharedPtr(const SharedPtr<T> &other) : _ptr(other._ptr), _ref_count(other._ref_count), _mtx(other._mtx)
 {
     if (_ref_count != nullptr)
     {
+        std::lock_guard<std::mutex> lock(*_mtx);
         (*_ref_count)++;
     }
 }
@@ -57,8 +61,10 @@ SharedPtr<T> &SharedPtr<T>::operator=(const SharedPtr<T> &other)
     this->reset();
     this->_ptr = other._ptr;
     this->_ref_count = other._ref_count;
+    this->_mtx = other._mtx;
     if (other._ref_count != nullptr)
     {
+        std::lock_guard<std::mutex> lock(*_mtx);
         (*other._ref_count)++;
     }
     return *this;
@@ -70,11 +76,20 @@ SharedPtr<T>::~SharedPtr()
     {
         return;
     }
-    (*_ref_count)--;
-    if (*_ref_count == 0)
+    bool delete_resource = false;
+    {
+        std::lock_guard<std::mutex> lock(*_mtx);
+        (*_ref_count)--;
+        if (*_ref_count == 0)
+        {
+            delete_resource = true;
+        }
+    }
+    if (delete_resource)
     {
         delete _ptr;
         delete _ref_count;
+        delete _mtx;
     }
 }
 template <typename T>
@@ -102,11 +117,20 @@ void SharedPtr<T>::reset()
     {
         return;
     }
-    (*_ref_count)--;
-    if (*_ref_count == 0)
+    bool delete_resource = false;
+    {
+        std::lock_guard<std::mutex> lock(*_mtx);
+        (*_ref_count)--;
+        if (*_ref_count == 0)
+        {
+            delete_resource = true;
+        }
+    }
+    if (delete_resource)
     {
         delete _ptr;
         delete _ref_count;
+        delete _mtx;
     }
     _ptr = nullptr;
     _ref_count = nullptr;

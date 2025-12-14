@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <vector>
+#include <thread>
 #include "../src/shared_ptr.h"
 
 class SharedPtrTest : public ::testing::Test
@@ -49,6 +50,14 @@ TEST_F(SharedPtrTest, CopyAssignmentOperator)
     EXPECT_EQ(*b, *a);
     EXPECT_EQ(*b, 100);
 }
+TEST_F(SharedPtrTest, SelfAssignment)
+{
+    SharedPtr<int> a(new int(100));
+    EXPECT_EQ(a.reference_count(), 1);
+    a = a; // self-assignment
+    EXPECT_EQ(a.reference_count(), 1);
+    EXPECT_EQ(*a, 100);
+}
 TEST_F(SharedPtrTest, DereferenceNormalPointer)
 {
     EXPECT_NO_THROW(
@@ -89,4 +98,100 @@ TEST_F(SharedPtrTest, ResetSharedPointer)
     EXPECT_EQ(b.reference_count(), 1);
     EXPECT_EQ(a.reference_count(), 0);
     EXPECT_THROW(*a, std::bad_optional_access);
+}
+TEST_F(SharedPtrTest, ResetNullPointer)
+{
+    SharedPtr<int> a(nullptr);
+    EXPECT_EQ(a.reference_count(), 0);
+    EXPECT_NO_THROW(a.reset());
+    EXPECT_EQ(a.reference_count(), 0);
+}
+TEST_F(SharedPtrTest, MultipleResets)
+{
+    SharedPtr<int> a(new int(100));
+    SharedPtr<int> b = a;
+    EXPECT_EQ(*a, 100);
+    EXPECT_EQ(a.reference_count(), 2);
+    EXPECT_EQ(b.reference_count(), 2);
+    a.reset();
+    EXPECT_EQ(b.reference_count(), 1);
+    EXPECT_EQ(a.reference_count(), 0);
+    EXPECT_THROW(*a, std::bad_optional_access);
+    a.reset(); // reset again
+    EXPECT_EQ(a.reference_count(), 0);
+    EXPECT_THROW(*a, std::bad_optional_access);
+}
+TEST_F(SharedPtrTest, ThreadSaeftyRaceCondition)
+{
+    std::vector<std::thread> threads;
+    SharedPtr<int> ptr6(new int(1));
+    std::vector<SharedPtr<int>> vec(10);
+    for (int i = 0; i < 10; ++i)
+    {
+        threads.emplace_back([&vec, i, ptr6]()
+                             { vec[i] = ptr6; });
+    }
+    for (auto &t : threads)
+    {
+        t.join();
+    }
+    assert(ptr6.reference_count() == 11);
+}
+TEST_F(SharedPtrTest, HeavyThreadStressTest)
+{
+    SharedPtr<int> p(new int(100));
+    auto worker = [&p]()
+    {
+        for (int i = 0; i < 1000; ++i)
+        {
+            // Copy Constructor: count++
+            SharedPtr<int> copy = p;
+            assert(*copy == 100);
+        } // copy 離開 scope: Destructor count--
+    };
+    std::vector<std::thread> threads;
+    for (int i = 0; i < 50; ++i)
+    {
+        threads.emplace_back(worker);
+    }
+    for (auto &t : threads)
+    {
+        t.join();
+    }
+    EXPECT_EQ(p.reference_count(), 1);
+    EXPECT_EQ(*p, 100);
+}
+TEST_F(SharedPtrTest, ConcurrentAssignmentAndReset)
+{
+    const int thread_count = 100;
+    std::vector<std::thread> threads;
+    std::vector<SharedPtr<int>> vec(thread_count);
+    SharedPtr<int> ptr(new int(999));
+    for (int i = 0; i < thread_count; ++i)
+    {
+        threads.emplace_back([&vec, i, ptr]()
+                             {
+            // operator= (增加計數)
+            vec[i] = ptr; });
+    }
+    for (auto &t : threads)
+    {
+        t.join();
+    }
+    EXPECT_EQ(ptr.reference_count(), thread_count + 1);
+    // 清空 vector 會觸發 100 次 destructor (減少計數)
+    std::vector<std::thread> clean_threads;
+    for (int i = 0; i < thread_count; ++i)
+    {
+        clean_threads.emplace_back(
+            [&vec, i]()
+            {
+                vec[i].reset(); // 手動 reset，觸發 mutex 保護的 --
+            });
+    }
+    for (auto &t : clean_threads)
+    {
+        t.join();
+    }
+    EXPECT_EQ(ptr.reference_count(), 1);
 }
