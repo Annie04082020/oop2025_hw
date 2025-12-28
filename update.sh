@@ -1,7 +1,7 @@
 # copy to homwork directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # echo $SCRIPT_DIR
-DATA_DIR="$SCRIPT_DIR/assignment8"
+DATA_DIR="$SCRIPT_DIR/assignment9"
 # echo $DATA_DIR
 HOMEWORK_DIR="$SCRIPT_DIR/../oop2025f_111310452_hw"
 # echo $HOMEWORK_DIR
