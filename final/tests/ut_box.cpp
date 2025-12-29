@@ -73,11 +73,11 @@ TEST_F(BoxTest, BoxSortItemOnly)
     EXPECT_EQ(contents[3]->get_weight(), 20);
     EXPECT_EQ(contents[4]->get_weight(), 50);
     big->sort_contents();
-    EXPECT_EQ(contents[0]->get_weight(), 50);
-    EXPECT_EQ(contents[1]->get_weight(), 40);
+    EXPECT_EQ(contents[0]->get_weight(), 10);
+    EXPECT_EQ(contents[1]->get_weight(), 20);
     EXPECT_EQ(contents[2]->get_weight(), 30);
-    EXPECT_EQ(contents[3]->get_weight(), 20);
-    EXPECT_EQ(contents[4]->get_weight(), 10);
+    EXPECT_EQ(contents[3]->get_weight(), 40);
+    EXPECT_EQ(contents[4]->get_weight(), 50);
     EXPECT_EQ(big->get_weight(), 151);
     delete big;
 }
@@ -128,8 +128,8 @@ TEST_F(BoxTest, BoxSortWithBoxAndItem)
     EXPECT_EQ(big_contents[2]->get_weight(), 6);
     big->sort_contents();
     // After sorting
-    EXPECT_EQ(big_contents[0]->get_weight(), 50);
+    EXPECT_EQ(big_contents[0]->get_weight(), 6);
     EXPECT_EQ(big_contents[1]->get_weight(), 41);
-    EXPECT_EQ(big_contents[2]->get_weight(), 6);
+    EXPECT_EQ(big_contents[2]->get_weight(), 50);
     delete big;
 }

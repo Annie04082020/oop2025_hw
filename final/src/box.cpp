@@ -65,7 +65,8 @@ void Box::sort_contents()
     // not sorting by any specific criteria as Cargo doesn't have comparable attributes
     std::sort(items.begin(), items.end(), [](Cargo *a, Cargo *b)
               {
-                  return a->get_weight() > b->get_weight(); // 比較重量，由小到大
+                  // Ascending order by weight
+                  return a->get_weight() < b->get_weight(); // 比較重量，由小到大
               });
 };
 const std::vector<Cargo *> &Box::get_contents() const
