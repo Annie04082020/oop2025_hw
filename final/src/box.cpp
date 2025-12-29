@@ -3,6 +3,8 @@
 #include "exceptions.h"
 #include "box.h"
 #include "cargo.h"
+
+// Don't need to initialize the vector
 Box::Box(double empty_weight, double max_weight) : empty_weight(empty_weight), max_weight(max_weight)
 {
 }
@@ -53,6 +55,7 @@ bool Box::is_dangerous() const
     bool danger = false;
     for (auto item : items)
     {
+        // save the result
         danger = danger || item->is_dangerous();
     }
     return danger;

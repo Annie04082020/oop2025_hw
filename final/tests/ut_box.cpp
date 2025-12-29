@@ -78,5 +78,58 @@ TEST_F(BoxTest, BoxSortItemOnly)
     EXPECT_EQ(contents[2]->get_weight(), 30);
     EXPECT_EQ(contents[3]->get_weight(), 20);
     EXPECT_EQ(contents[4]->get_weight(), 10);
+    EXPECT_EQ(big->get_weight(), 151);
+    delete big;
+}
+TEST_F(BoxTest, ComplexDestruction)
+{
+    Box *root = Box::make_box(1, 1000);
+    Box *child = Box::make_box(1, 500);
+    Box *grandChild = Box::make_box(1, 100);
+    child->add(grandChild);
+    root->add(child);
+    root->add(Item::make_item(10, false));
+    grandChild->add(Item::make_item(5, true));
+    EXPECT_NO_THROW(delete root);
+}
+TEST_F(BoxTest, InvalidBoxCreation)
+{
+    Box *a = Box::make_box(-10, 100);
+    EXPECT_EQ(a, nullptr);
+    Box *b = Box::make_box(10, -100);
+    EXPECT_EQ(b, nullptr);
+    Box *c = Box::make_box(100, 50);
+    EXPECT_EQ(c, nullptr);
+}
+TEST_F(BoxTest, BoxSortWithBoxAndItem)
+{
+    Box *big = Box::make_box(1, 101);
+    Box *small = Box::make_box(1, 11);
+    Box *mid = Box::make_box(1, 51);
+    Item *item50 = Item::make_item(50, true);
+    Item *item30 = Item::make_item(30, true);
+    Item *item10 = Item::make_item(10, true);
+    Item *item5 = Item::make_item(5, true);
+    EXPECT_NO_THROW(
+        small->add(item5);
+        mid->add(item30);
+        mid->add(item10);
+        big->add(mid);
+        big->add(item50);
+        big->add(small););
+    EXPECT_EQ(big->get_weight(), 98);
+    const std::vector<Cargo *> &big_contents = big->get_contents();
+    EXPECT_EQ(big_contents.size(), 3);
+    // Before sorting
+    // Mid box weight = item30 + item10 + 1 = 41
+    EXPECT_EQ(big_contents[0]->get_weight(), 41);
+    EXPECT_EQ(big_contents[1]->get_weight(), 50);
+    // Small box weight = item5 + 1 = 6
+    EXPECT_EQ(big_contents[2]->get_weight(), 6);
+    big->sort_contents();
+    // After sorting
+    EXPECT_EQ(big_contents[0]->get_weight(), 50);
+    EXPECT_EQ(big_contents[1]->get_weight(), 41);
+    EXPECT_EQ(big_contents[2]->get_weight(), 6);
     delete big;
 }

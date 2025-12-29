@@ -9,6 +9,7 @@ class Box : public Cargo
 private:
     double empty_weight;
     double max_weight;
+    // Keep the contents since you can't initialize a reference
     std::vector<Cargo *> items;
     Box(double empty_weight, double max_weight);
 
